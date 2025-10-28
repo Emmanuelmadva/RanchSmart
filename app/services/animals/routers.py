@@ -71,3 +71,35 @@ def delete_animal(animal_id: int, db: Session = Depends(get_db)):
     db.delete(animal)
     db.commit()
     return {"detail": "Animal supprimé avec succès"}
+
+# Rechercher un animal par nom
+@animal_router.get("/search/", response_model=List[schemas.AnimalRead])
+def search_animals(name: str, db: Session = Depends(get_db)):
+    results = db.query(models.Animal).filter(models.Animal.name.ilike(f"%{name}%")).all()
+    if not results:
+        raise HTTPException(status_code=404, detail="Aucun animal trouvé pour ce nom")
+    return results
+
+
+# Filtrer les animaux par critères
+@animal_router.get("/filter/", response_model=List[schemas.AnimalRead])
+def filter_animals(
+        species: str | None = None,
+        age: int | None = None,
+        sex: str | None = None,
+        db: Session = Depends(get_db)
+):
+    query = db.query(models.Animal)
+
+    if species:
+        query = query.filter(models.Animal.species == species)
+    if age:
+        query = query.filter(models.Animal.age == age)
+    if sex:
+        query = query.filter(models.Animal.sex == sex)
+
+    results = query.all()
+    if not results:
+        raise HTTPException(status_code=404, detail="Aucun animal trouvé avec ces critères")
+    return results
+
