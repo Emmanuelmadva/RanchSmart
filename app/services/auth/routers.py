@@ -1,15 +1,12 @@
-# app/services/auth/routers.py
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, UploadFile, File
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
-from jose import jwt, JWTError
+from jose import jwt
 from datetime import datetime, timedelta
 from app.services.auth import models, schemas
 from database.connection import get_db
-from fastapi import UploadFile, File
 import shutil
 import os
-
 
 UPLOAD_DIR = "app/static/assets/profiles"
 SECRET_KEY = "ranchsmart-secret-key"
@@ -44,11 +41,13 @@ def register_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
         username=user.username,
         email=user.email,
         hashed_password=hashed_pw,
-        profile_image=user.profile_image
+        profile_image=user.profile_image,
+        role=user.role  # rôle de l'employé
     )
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
+    return new_user
 
 # --- Connexion ---
 @auth_router.post("/login")
@@ -60,15 +59,14 @@ def login(email: str, password: str, db: Session = Depends(get_db)):
     token = create_access_token({"sub": user.email})
     return {"access_token": token, "token_type": "bearer"}
 
+# --- Upload de la photo de profil ---
 @auth_router.post("/upload-profile/{user_id}")
 def upload_profile_image(user_id: int, file: UploadFile = File(...), db: Session = Depends(get_db)):
     user = db.query(models.User).filter(models.User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
 
-    # Création du dossier si nécessaire
     os.makedirs(UPLOAD_DIR, exist_ok=True)
-
     file_path = f"{UPLOAD_DIR}/{user_id}_{file.filename}"
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)

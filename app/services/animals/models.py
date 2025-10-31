@@ -20,3 +20,7 @@ class Animal(Base):
 
     # Relation avec l'enclos
     enclosure = relationship("Enclosure", back_populates="animals")
+
+    # Ajouter à Animal
+    staff_id = Column(Integer, ForeignKey("staff.id"), nullable=True)
+    assigned_staff = relationship("Staff", back_populates="assigned_animals")
