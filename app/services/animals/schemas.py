@@ -1,8 +1,8 @@
+# app/services/animals/schemas.py
 from pydantic import BaseModel
 from typing import Optional
 from datetime import date
 
-# Schéma pour la création d'un animal
 class AnimalCreate(BaseModel):
     name: str
     species: str
@@ -10,15 +10,15 @@ class AnimalCreate(BaseModel):
     weight: Optional[float] = None
     health_status: Optional[str] = "Bonne santé"
     last_vaccination: Optional[date] = None
+    enclosure_id: Optional[int] = None
+    profile_image: Optional[str] = None  # Photo optionnelle
 
-# Schéma pour la lecture d'un animal (avec l'id)
 class AnimalRead(AnimalCreate):
     id: int
 
     class Config:
         orm_mode = True
 
-# Schéma pour la mise à jour d'un animal
 class AnimalUpdate(BaseModel):
     name: Optional[str] = None
     species: Optional[str] = None
@@ -26,3 +26,5 @@ class AnimalUpdate(BaseModel):
     weight: Optional[float] = None
     health_status: Optional[str] = None
     last_vaccination: Optional[date] = None
+    enclosure_id: Optional[int] = None
+    profile_image: Optional[str] = None  # Permet de mettre à jour la photo

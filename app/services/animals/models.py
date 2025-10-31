@@ -1,5 +1,7 @@
-from sqlalchemy import Column, Integer, String, Float, Date
+from sqlalchemy import Column, Integer, String, Float, Date, ForeignKey
+from sqlalchemy.orm import relationship
 from database.connection import Base
+
 
 class Animal(Base):
     __tablename__ = "animals"
@@ -11,3 +13,10 @@ class Animal(Base):
     weight = Column(Float, nullable=True)
     health_status = Column(String, default="Healthy")
     last_vaccination = Column(Date, nullable=True)
+    profile_image = Column(String, nullable=True)
+
+    # Clé étrangère vers l'enclos
+    enclosure_id = Column(Integer, ForeignKey("enclosures.id"), nullable=True)
+
+    # Relation avec l'enclos
+    enclosure = relationship("Enclosure", back_populates="animals")
