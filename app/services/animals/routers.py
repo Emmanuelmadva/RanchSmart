@@ -16,7 +16,7 @@ def get_db():
     finally:
         db.close()
 
-
+  
 # ----------------------------
 # Endpoints CRUD pour Animals
 # ----------------------------
