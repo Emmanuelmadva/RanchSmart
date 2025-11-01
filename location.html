@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location</title>
+    <link rel="stylesheet" href="./asset/css/style.css">
+    <script text="text/javascript" src="./asset/js/index.js" defer></script>
+</head>
+<body>
+
+    <!-- sidebar start -->
+
+    <aside id="sidebar">
+
+        <ul>
+            <li>
+                <span class="logo">Ranch Smart</span>
+                <button onclick=toggleSidebar() id="toggle-btn" aria-label="toggle sidebar">
+                    <svg class="svg-double-arrow" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="m242-200 200-280-200-280h98l200 280-200 280h-98Zm238 0 200-280-200-280h98l200 280-200 280h-98Z"/></svg>
+                    <svg class="svg-close" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+                </button>
+            </li>
+            <li class="home-li">
+                <a href="index.html">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"/></svg>
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <button class="dropdown-btn" onclick=toggleSubMenu(this)>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M560-320h80v-80h80v-80h-80v-80h-80v80h-80v80h80v80ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Z"/></svg>
+                    <span>Create</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"/></svg>
+                </button>
+                <ul class="sub-menu">
+                    <div>
+                        <li><a href="#">Folder</a></li>
+                        <li><a href="#">Document</a></li>
+                        <li><a href="#">Project</a></li>
+                    </div>
+                </ul>
+            </li>
+            <li>
+                <button class="dropdown-btn" onclick=toggleSubMenu(this)>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M222-200 80-342l56-56 85 85 170-170 56 57-225 226Zm0-320L80-662l56-56 85 85 170-170 56 57-225 226Zm298 240v-80h360v80H520Zm0-320v-80h360v80H520Z"/></svg>
+                    <span>Todo-Lists</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z"/></svg>
+                </button>
+                <ul class="sub-menu">
+                    <div>
+                        <li><a href="#">Work</a></li>
+                        <li><a href="#">Private</a></li>
+                        <li><a href="#">Coding</a></li>
+                        <li><a href="#">Gardening</a></li>
+                        <li><a href="#">School</a></li>
+                    </div>
+                </ul>
+            </li>
+            <li>
+                <a href="animals.html">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M380-80q-75 0-127.5-52.5T200-260q0-35 17-64.5t63-75.5q6-6 11.5-12.5T306-430q-51-78-78.5-163.5T200-760q0-58 21-89t59-31q57 0 102 55t68 101q9 20 16.5 40.5T480-641q6-22 13.5-42.5T511-724q22-46 67-101t102-55q38 0 59 31t21 89q0 81-27.5 166.5T654-430q9 11 14.5 17.5T680-400q46 46 63 75.5t17 64.5q0 75-52.5 127.5T580-80q-45 0-72.5-10L480-100l-27.5 10Q425-80 380-80Zm0-80q23 0 46-5.5t43-16.5q-11-5-20-17t-9-21q0-8 11.5-14t28.5-6q17 0 28.5 6t11.5 14q0 9-9 21t-20 17q20 11 43 16.5t46 5.5q42 0 71-29t29-71q0-18-10-35t-30-34q-14-12-23-21t-29-34q-29-35-48-45.5T480-440q-41 0-60.5 10.5T372-384q-20 25-29 34t-23 21q-20 17-30 34t-10 35q0 42 29 71t71 29Zm40-130q-8 0-14-9t-6-21q0-12 6-21t14-9q8 0 14 9t6 21q0 12-6 21t-14 9Zm120 0q-8 0-14-9t-6-21q0-12 6-21t14-9q8 0 14 9t6 21q0 12-6 21t-14 9ZM363-489q11-8 25-14t31-11q-2-48-14.5-95.5T373-696q-19-40-42-67.5T285-799q-2 6-3.5 15.5T280-760q0 68 21.5 138T363-489Zm234 0q40-63 61.5-133T680-760q0-14-1.5-23.5T675-799q-23 8-46 35.5T587-696q-18 39-30.5 86.5T541-514q15 4 29 10.5t27 14.5Z"/></svg>
+                    <span>Animals</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="location.html">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 294q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-186Zm0 106Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Zm0-480Z"/></svg>
+                    <span>Location</span>
+                </a>
+            </li>
+            <li>
+                <a href="finance.html">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M200-120q-33 0-56.5-23.5T120-200v-640h80v640h640v80H200Zm40-120v-360h160v360H240Zm200 0v-560h160v560H440Zm200 0v-200h160v200H640Z"/></svg>
+                    <span>Finance</span>
+                </a>
+            </li>
+            <li>
+                <a href="personnel.html">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm720 0v-120q0-44-24.5-84.5T666-434q51 6 96 20.5t84 35.5q36 20 55 44.5t19 53.5v120H760ZM360-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm400-160q0 66-47 113t-113 47q-11 0-28-2.5t-28-5.5q27-32 41.5-71t14.5-81q0-42-14.5-81T544-792q14-5 28-6.5t28-1.5q66 0 113 47t47 113ZM120-240h480v-32q0-11-5.5-20T580-306q-54-27-109-40.5T360-360q-56 0-111 13.5T140-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T440-640q0-33-23.5-56.5T360-720q-33 0-56.5 23.5T280-640q0 33 23.5 56.5T360-560Zm0 320Zm0-400Z"/></svg>
+                    <span>Personnel</span>
+                </a>
+            </li>
+            <!-- <li>
+                <a href="#">
+                    <img src="./asset/Svg/person_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="Home icon" width="24" height="24">
+                    <span>Profile</span>
+                </a>
+            </li> -->
+        </ul>
+
+    </aside>
+
+    <!-- sidebar end -->
+
+
+    <!-- main start -->
+
+    <main>
+
+        <!-- header start -->
+
+        <header class="header">
+
+            <div class="nav-main-container">
+                <div class="nav-container">
+                    <div class="nav-part-left">
+
+                        <!-- ======Menu button start ======== -->
+                        <button class="open-sidebar-btn" onclick= openSideBar()>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg>
+                            <span>Menu</span>
+                        </button>
+
+                        <!-- ====== Menu button end ========= -->
+
+                        <!-- ====== Search button start ========== -->
+                        <form action="#">
+                            <div class="search">                            
+                                <svg class="search-svg" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>
+                                <input type="search" placeholder="Search ..." class="search-input"/>
+                            </div>
+                        </form>
+
+                        <!-- ======= Search button end ======= -->
+
+                    </div>
+                    <div class="nav-part-right">
+                        <button class="profile">
+                            <div class="profile-info">
+                                <div class="profile-img">
+                                    <img src="./asset/img/profile-image.png" width="40px" height="40px" alt="A profile photo">
+                                </div>
+                                <div class="profile-info-name">
+                                    <h6> <span>Jhone Doe</span></h6>
+                                    <p>Admin</p>
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </header>
+
+        <!-- overlay : to allow user to close de navbar by simple taping outside of it -->
+
+        <div id="overlay" onclick="closeSideBar()" aria-hidden="true"></div>
+
+        <!-- header end -->
+
+        <section class="section">
+
+            <div class="container">
+                <h2>Location</h2>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti accusamus omnis impedit fugiat repellat voluptatum necessitatibus quia ipsa nemo soluta aspernatur blanditiis, aliquam autem modi rerum suscipit ipsum harum minima dolorem quas nihil reiciendis neque. Voluptatibus deleniti accusamus alias minus</p>
+            </div>
+            <div class="container">
+                <h2>English</h2>
+                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nesciunt corporis nostrum minus doloremque repudiandae quaerat ea esse rerum quam iure repellat deserunt nisi officia nemo quibusdam obcaecati perspiciatis consequatur voluptate omnis sapiente architecto nulla, voluptas dolores recusandae. Excepturi natus quasi provident quod amet fugiat doloribus animi, doloremque, repudiandae sed, ipsum debitis rem illo qui ea! Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut, temporibus ipsa non velit nihil alias nemo necessitatibus cupiditate beatae minus iusto inventore magnam voluptatem libero accusantium officia! Nesciunt, aliquam sequi?</p>
+            </div>
+            <div class="container">
+                <h2>French</h2>
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil quos eos fugit incidunt odio laboriosam voluptas, eum ipsum, illum quo repudiandae reprehenderit est at optio? Iste iusto numquam adipisci sunt quo illum aliquid quos aut deserunt, ad provident quidem perspiciatis eum ex quis dignissimos expedita, tempore ullam recusandae vel quia nobis sit. Quod illo fuga vero, voluptatum obcaecati minima ipsa, quas similique blanditiis rerum iusto amet sequi. Fuga, quasi non. Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium, hic voluptatum! Praesentium, explicabo similique doloremque veniam obcaecati officia dolorem omnis. Eaque voluptatibus vel quas, placeat doloremque, similique tempore exercitationem omnis hic enim ad, laboriosam quisquam illum velit aut voluptas veritatis sunt soluta error sint. Possimus enim ipsum ipsam tempora repellendus in reprehenderit est distinctio dolor laudantium dignissimos repudiandae, ad blanditiis.</p>
+            </div>
+
+        </section>
+
+
+        <!-- footer start -->
+
+        <footer class="footer">
+            Copyright © <span>Ranch Smart</span>  2025 <br> All right reserve
+        </footer>
+
+        <!-- footer end -->
+        
+    </main>
+
+    <!-- main end -->
+    
+</body>
+</html>
