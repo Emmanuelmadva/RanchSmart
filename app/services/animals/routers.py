@@ -1,5 +1,5 @@
 # app/services/animals/routers.py
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
 from sqlalchemy.orm import Session
 from typing import List
 from datetime import date
@@ -8,6 +8,9 @@ import shutil, os
 
 from database.connection import SessionLocal
 from app.services.animals import models, schemas
+from .models import Animal
+from app.services.enclosures.models import Enclosure
+
 
 animal_router = APIRouter()
 
@@ -44,19 +47,19 @@ def get_animal(animal_id: int, db: Session = Depends(get_db)):
 
 @animal_router.post("/", response_model=schemas.AnimalRead)
 def create_animal_with_photo(
-    name: str,
-    species: str,
-    age: int | None = None,
-    weight: float | None = None,
-    health_status: str | None = "Bonne santé",
-    last_vaccination: date | None = None,
-    enclosure_id: int | None = None,
+    name: str = Form(...),
+    species: str = Form(...),
+    age: int | None = Form(None),
+    weight: float | None = Form(None),
+    health_status: str | None = Form("Bonne santé"),
+    last_vaccination: date | None = Form(None),
+    enclosure_id: int | None = Form(None),
     file: UploadFile | None = File(None),  # photo optionnelle
     db: Session = Depends(get_db)
 ):
     # Vérifier l'enclos si fourni
     if enclosure_id:
-        enclosure = db.query(models.Enclosure).filter(models.Enclosure.id == enclosure_id).first()
+        enclosure = db.query(Enclosure).filter(Enclosure.id == enclosure_id).first()
         if not enclosure:
             raise HTTPException(status_code=404, detail="Enclos non trouvé")
 
@@ -97,7 +100,7 @@ def update_animal(animal_id: int, animal_update: schemas.AnimalUpdate, db: Sessi
     # Vérifier l'enclos si on souhaite le changer
     if "enclosure_id" in update_data:
         if update_data["enclosure_id"]:
-            enclosure = db.query(models.Enclosure).filter(models.Enclosure.id == update_data["enclosure_id"]).first()
+            enclosure = db.query(Enclosure).filter(Enclosure.id == update_data["enclosure_id"]).first()
             if not enclosure:
                 raise HTTPException(status_code=404, detail="Enclos non trouvé")
 

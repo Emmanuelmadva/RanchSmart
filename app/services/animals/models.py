@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Float, Date, ForeignKey
 from sqlalchemy.orm import relationship
 from database.connection import Base
+from app.services.enclosures.models import Enclosure
 
 
 class Animal(Base):
