@@ -384,7 +384,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const signupForm = document.getElementById('signupForm');
     const loginForm = document.getElementById('loginForm');
 
-    //  formulaire d;inscription
+    //  formulaire d'inscription
   
     if (signupForm) {
         signupForm.addEventListener('submit', async (e) => {
@@ -426,45 +426,47 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+    //  formulaire de connexion
 
-    // formulaire de connexion
-    if (loginForm) {
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
+if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            const formData = new URLSearchParams();
-            formData.append('email', email);
-            formData.append('password', password);
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        
+        const requestBody = {
+            email: email,
+            password: password
+        };
 
-            try {
-                const response = await fetch(`${API_BASE_URL}/auth/login`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded', 
-                    },
-                    body: formData.toString(),
-                });
+        try {
+            const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', 
+                },
+                body: JSON.stringify(requestBody),
+            });
 
-                const result = await response.json();
+            const result = await response.json();
 
-                if (response.ok) {
-                    const token = result.access_token;
-                    localStorage.setItem('ranchsmart_token', token); 
-                    
-                    alert(`Connexion réussie! Bienvenue sur RanchSmart.`);
-                    closeModal('loginModal');
+            if (response.ok) {
+                const token = result.access_token;
+                localStorage.setItem('ranchsmart_token', token); 
+                alert(`Connexion réussie! Bienvenue sur RanchSmart.`); 
+                closeModal('loginModal');
 
-                } else {
-                    alert(`Erreur de connexion : ${result.detail || 'Vérifiez vos identifiants.'}`);
-                }
-            } catch (error) {
-                console.error('Erreur lors de l\'envoi de la requête de connexion:', error);
-                alert('Échec de la connexion au serveur. Veuillez réessayer plus tard.');
+            } else {
+                alert(`Erreur de connexion : ${result.detail || 'Vérifiez vos identifiants.'}`);
             }
-        });
-    }
+        } catch (error) {
+            console.error('Erreur lors de l\'envoi de la requête de connexion:', error);
+            alert('Échec de la connexion au serveur. Veuillez réessayer plus tard.');
+        }
+    });
+}
+
 });
   </script>
 </body>

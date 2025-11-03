@@ -2,12 +2,11 @@ from database.connection import Base, engine
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from pathlib import Path
-from fastapi.staticfiles import StaticFiles 
-
+from fastapi.staticfiles import StaticFiles
 from app.services.animals.models import Animal
-from app.services.auth.models import User 
-from app.services.enclosures.models import Enclosure 
-from app.services.staff.models import Staff 
+from app.services.auth.models import User
+from app.services.enclosures.models import Enclosure
+from app.services.staff.models import Staff
 
 from app.services.animals.routers import animal_router
 from app.services.auth.routers import auth_router
@@ -18,6 +17,7 @@ from app.services.staff.routers import staff_router
 app = FastAPI(title="RanchSmart API")
 
 def create_db_tables():
+    """Tente de créer toutes les tables de la base de données."""
     print("Tentative de création des tables...")
     try:
         Base.metadata.create_all(bind=engine)
@@ -25,7 +25,7 @@ def create_db_tables():
     except Exception as e:
         print(f"Erreur lors de la création des tables : {e}")
 
-create_db_tables()
+create_db_tables() 
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
@@ -39,14 +39,6 @@ def landing_page():
         return HTMLResponse(content=html_content, status_code=200)
     except FileNotFoundError:
         return HTMLResponse(content=f"<h1>Erreur 404</h1><p>Fichier HTML non trouvé au chemin: {HTML_FILE_PATH}</p>", status_code=404)
-
-
-app.include_router(animal_router, prefix="/animals", tags=["Animals"])
-print("Création des tables...")
-Base.metadata.create_all(bind=engine)
-print("Tables créées avec succès !")
-
-app = FastAPI(title="RanchSmart API")
 
 app.include_router(auth_router, prefix="/auth", tags=["Authentification"])
 app.include_router(animal_router, prefix="/animals", tags=["Animaux"])
