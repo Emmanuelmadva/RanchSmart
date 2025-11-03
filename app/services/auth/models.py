@@ -8,6 +8,7 @@ class User(Base):
     username = Column(String(50), unique=True, nullable=False)
     email = Column(String(100), unique=True, nullable=False)
     hashed_password = Column(String(255), nullable=False)
+    role = Column(String, nullable=False)
     profile_image = Column(String(255), nullable=True)  # Photo de profil
     is_active = Column(Boolean, default=True)
-    role = Column(String(50), nullable=False, default="cowboy")  # rôle de l'employé (cowboy, vet, manager...)
+

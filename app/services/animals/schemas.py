@@ -16,8 +16,10 @@ class AnimalCreate(BaseModel):
 class AnimalRead(AnimalCreate):
     id: int
 
-    class Config:
-        orm_mode = True
+
+class Config:
+    from_attributes = True
+
 
 class AnimalUpdate(BaseModel):
     name: Optional[str] = None
