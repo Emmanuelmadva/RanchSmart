@@ -42,7 +42,14 @@ def landing_page():
 
 
 app.include_router(animal_router, prefix="/animals", tags=["Animals"])
+print("Création des tables...")
+Base.metadata.create_all(bind=engine)
+print("Tables créées avec succès !")
+
+app = FastAPI(title="RanchSmart API")
+
 app.include_router(auth_router, prefix="/auth", tags=["Authentification"])
+app.include_router(animal_router, prefix="/animals", tags=["Animaux"])
 app.include_router(enclosure_router, prefix="/enclosures", tags=["Enclos"])
 app.include_router(staff_router, prefix="/staff", tags=["Staff"])
 

@@ -5,6 +5,7 @@ from jose import jwt
 from datetime import datetime, timedelta
 from app.services.auth import models, schemas
 from database.connection import get_db
+from app.services.auth.schemas import LoginSchema
 import shutil
 import os
 
@@ -15,11 +16,15 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-auth_router = APIRouter(prefix="/auth", tags=["Authentification"])
+auth_router = APIRouter()
 
 def hash_password(password: str):
     safe_password = password[:72]
     return pwd_context.hash(safe_password)
+def hash_password(password: str) -> str:
+    password = password[:72]  # tronque si trop long
+    return pwd_context.hash(password)
+
 
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
@@ -42,8 +47,8 @@ def register_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
         username=user.username,
         email=user.email,
         hashed_password=hashed_pw,
-        profile_image=user.profile_image,
-        role=user.role  # rôle de l'employé
+        role=user.role,
+        profile_image=user.profile_image
     )
     db.add(new_user)
     db.commit()
@@ -52,11 +57,10 @@ def register_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 
 # --- Connexion ---
 @auth_router.post("/login")
-def login(email: str, password: str, db: Session = Depends(get_db)):
-    user = db.query(models.User).filter(models.User.email == email).first()
-    if not user or not verify_password(password, user.hashed_password):
+def login(login: LoginSchema, db: Session = Depends(get_db)):
+    user = db.query(models.User).filter(models.User.email == login.email).first()
+    if not user or not verify_password(login.password, user.hashed_password):
         raise HTTPException(status_code=401, detail="Identifiants incorrects")
-
     token = create_access_token({"sub": user.email})
     return {"access_token": token, "token_type": "bearer"}
 
