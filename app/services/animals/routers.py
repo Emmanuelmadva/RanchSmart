@@ -1,5 +1,4 @@
-# app/services/animals/routers.py
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form 
 from sqlalchemy.orm import Session
 from typing import List
 from datetime import date
@@ -12,7 +11,6 @@ from app.services.animals import models, schemas
 animal_router = APIRouter()
 
 
-# Dépendance pour récupérer la session DB
 def get_db():
     db = SessionLocal()
     try:
@@ -21,17 +19,11 @@ def get_db():
         db.close()
 
 UPLOAD_DIR = "app/static/assets/animal_photos"
-# ----------------------------
-# Endpoints CRUD pour Animals
-# ----------------------------
-
-# Lister tous les animaux
 @animal_router.get("/", response_model=List[schemas.AnimalRead])
 def get_animals(db: Session = Depends(get_db)):
     return db.query(models.Animal).all()
 
 
-# Récupérer un animal par ID
 @animal_router.get("/{animal_id}", response_model=schemas.AnimalRead)
 def get_animal(animal_id: int, db: Session = Depends(get_db)):
     animal = db.query(models.Animal).filter(models.Animal.id == animal_id).first()
@@ -40,25 +32,32 @@ def get_animal(animal_id: int, db: Session = Depends(get_db)):
     return animal
 
 
-# Ajouter un nouvel animal avec enclos
-
 @animal_router.post("/", response_model=schemas.AnimalRead)
 def create_animal_with_photo(
-    name: str,
-    species: str,
-    age: int | None = None,
-    weight: float | None = None,
-    health_status: str | None = "Bonne santé",
-    last_vaccination: date | None = None,
-    enclosure_id: int | None = None,
-    file: UploadFile | None = File(None),  # photo optionnelle
+    name: str = Form(...), 
+    species: str = Form(...), 
+    age: int | None = Form(None), 
+    weight: float | None = Form(None), 
+    health_status: str | None = Form("Bonne santé"), 
+    last_vaccination: date | None = Form(None), 
+    enclosure_id: int | None = Form(None), 
+    file: UploadFile | None = File(None), 
     db: Session = Depends(get_db)
 ):
-    # Vérifier l'enclos si fourni
+    if last_vaccination and isinstance(last_vaccination, str):
+        try:
+            last_vaccination = date.fromisoformat(last_vaccination)
+        except ValueError:
+             raise HTTPException(status_code=400, detail="Format de date de vaccination invalide. Utilisez YYYY-MM-DD.")
+             
     if enclosure_id:
-        enclosure = db.query(models.Enclosure).filter(models.Enclosure.id == enclosure_id).first()
-        if not enclosure:
-            raise HTTPException(status_code=404, detail="Enclos non trouvé")
+        try:
+            enclosure = db.query(models.Enclosure).filter(models.Enclosure.id == enclosure_id).first()
+        except AttributeError:
+             pass
+        
+        if 'enclosure' in locals() and not enclosure: # Vérifie si la requête DB a été faite et si l'enclos est null
+             raise HTTPException(status_code=404, detail=f"Enclos avec ID {enclosure_id} non trouvé")
 
     new_animal = models.Animal(
         name=name,
@@ -71,14 +70,19 @@ def create_animal_with_photo(
     )
 
     # Sauvegarder la photo si fournie
-    if file:
+    if file and file.filename:
         UPLOAD_DIR = "app/static/assets/animals"
         os.makedirs(UPLOAD_DIR, exist_ok=True)
-        file_path = f"{UPLOAD_DIR}/{name}_{file.filename}"
+        filename = f"{name.replace(' ', '_')}_{os.path.basename(file.filename)}"
+        file_path = os.path.join(UPLOAD_DIR, filename)
+        
+        relative_path = f"/static/assets/animals/{filename}" 
+        
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
-        new_animal.photo_url = f"/{file_path}"
-
+            
+        new_animal.profile_image = relative_path 
+        
     db.add(new_animal)
     db.commit()
     db.refresh(new_animal)

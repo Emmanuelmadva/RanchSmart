@@ -27,7 +27,10 @@ def create_db_tables():
 
 create_db_tables() 
 
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
+app.mount("/assets", StaticFiles(directory="app/assets"), name="assets")
+
+DASHBOARD_DIR = Path("app") / "static" / "template" / "pages" / "dashboardUser"
+app.mount("/dashboardUser", StaticFiles(directory=DASHBOARD_DIR), name="dashboard")
 
 HTML_FILE_PATH = Path("app") / "static" / "template" / "pages" / "landing" / "landing.html"
 
