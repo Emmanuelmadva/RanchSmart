@@ -1,1 +1,10 @@
-"__pycache__/" 
+# Fichiers Python à ignorer
+__pycache__/
+*.pyc
+
+# Environnement virtuel
+venv/
+
+# Fichiers système
+.DS_Store
+.idea/
