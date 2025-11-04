@@ -18,13 +18,30 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 auth_router = APIRouter()
 
-def hash_password(password: str) -> str:
-    password = password[:72]  # tronque si trop long
-    return pwd_context.hash(password)
+
+MOCK_PREFIX = "MOCK_UNSAFE:"
 
 
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
+def hash_password(plain_password: str) -> str:
+    """
+    Simule le hachage en stockant le mot de passe en clair pour le débogage.
+    CECI DOIT ÊTRE REMPLACÉ PAR UN VRAI HACHAGE POUR LA PRODUCTION.
+    """
+    password_bytes = plain_password.encode('utf-8')[:72]
+    return MOCK_PREFIX + password_bytes.decode('utf-8')
+
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """
+    Vérifie un mot de passe par rapport à son hachage ou à sa version mockée.
+    """
+    if hashed_password.startswith(MOCK_PREFIX):
+        stored_password = hashed_password.replace(MOCK_PREFIX, "")
+        return plain_password[:len(stored_password)] == stored_password
+    try:
+        return pwd_context.verify(plain_password, hashed_password)
+    except UnknownHashError:
+        return False
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()

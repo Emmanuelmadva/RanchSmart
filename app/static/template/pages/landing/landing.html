@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RanchSmart - Gestion de Ranch Moderne</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            rye: ['"Rye"', 'cursive'],
+            montserrat: ['Montserrat', 'sans-serif'],
+          },
+          colors: {
+            primary: '#8B4513',
+            accent: '#DAA520',
+            dark: '#2F1B12',
+            light: '#F5F5DC',
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Rye&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+  <style>
+    .vanta-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.5; }
+    .modal { transition: all 0.3s ease; }
+    .swiper-button-next, .swiper-button-prev { color: #DAA520 !important; }
+    .swiper-pagination-bullet-active { background: #DAA520 !important; }
+    .stat-number { font-size: 3rem; font-weight: 800; }
+    .step-card:hover { transform: translateY(-8px); }
+    .benefit-icon { width: 80px; height: 80px; }
+  </style>
+</head>
+<body class="font-montserrat text-gray-800 overflow-x-hidden">
+
+  <div id="vanta-bg" class="vanta-bg"></div>
+
+  <!-- NAVBAR -->
+  <nav class="fixed top-0 w-full bg-white/95 backdrop-blur-md shadow-lg z-50 h-20 md:h-24">
+    <div class="container mx-auto px-4 h-full flex justify-between items-center">
+      <a href="#" class="flex items-center">
+           <img src="/static/template/pages/landing/assets/Logo_P1.png" onerror="this.onerror=null;this.src='https://www.google.com/search?q=https://placehold.co/100x60/8B4513/FFFFFF%3Ftext%3DRanchSmart'" alt="RanchSmart" class="h-14 md:h-18 lg:h-20 w-auto max-h-full object-contain ">
+      </a>
+      <div class="flex items-center space-x-6">
+        <a href="#features" class="hidden md:block text-gray-700 hover:text-accent font-semibold transition">Fonctionnalités</a>
+        <a href="#pricing" class="hidden md:block text-gray-700 hover:text-accent font-semibold transition">Tarifs</a>
+        <button onclick="openModal('loginModal')" class="text-gray-700 hover:text-accent font-medium">Connexion</button>
+        <button onclick="openModal('signupModal')" class="bg-accent hover:bg-yellow-600 text-white font-bold py-2 px-6 rounded-full transition shadow-md">S’inscrire</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="relative h-screen flex items-center justify-center overflow-hidden">
+    <div class="swiper heroSwiper w-full h-full">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide"><img src="https://images.pexels.com/photos/235725/pexels-photo-235725.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Ranch" class="w-full h-full object-cover"></div>
+        <div class="swiper-slide"><img src="https://images.pexels.com/photos/4666755/pexels-photo-4666755.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Troupeau" class="w-full h-full object-cover"></div>
+        <div class="swiper-slide"><img src="https://images.pexels.com/photos/2886937/pexels-photo-2886937.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Clôtures" class="w-full h-full object-cover"></div>
+        <div class="swiper-slide"><img src="https://images.pexels.com/photos/259280/pexels-photo-259280.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Grange" class="w-full h-full object-cover"></div>
+        <div class="swiper-slide"><img src="https://images.pexels.com/photos/1632790/pexels-photo-1632790.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Tracteur" class="w-full h-full object-cover"></div>
+      </div>
+      <div class="swiper-pagination"></div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+    </div>
+
+    <div class="absolute inset-0 flex items-center justify-center z-10 px-6">
+      <div class="text-center max-w-5xl ">
+        <h1 class="text-5xl md:text-7xl lg:text-8xl font-rye text-white drop-shadow-2xl mb-6">Gérez Votre Ranch <span class="text-accent">Comme un Pro</span></h1>
+        <p class="text-xl md:text-3xl text-white mb-10 drop-shadow-lg">Bétail • Pâturages • Finances • Planning</p>
+        <div class="space-x-4">
+          <button onclick="openModal('signupModal')" class="bg-accent hover:bg-yellow-600 text-white font-bold py-4 px-10 rounded-full text-lg transition shadow-xl transform hover:scale-105">
+            Démarrer Gratuitement
+          </button>
+          <a href="#demo" class="bg-white/20 backdrop-blur-md hover:bg-white/40 text-white border-2 border-white font-bold py-4 px-10 rounded-full text-lg transition">
+            Voir la Démo
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+
+  <!-- FEATURES -->
+  <section id="features" class="py-24 bg-white">
+    <div class="container mx-auto px-4">
+      <h2 class="text-5xl md:text-6xl font-rye text-center text-primary mb-20" data-aos="fade-up">Tout en un seul outil</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div class="text-center group" data-aos="fade-up" data-aos-delay="100">
+          <div class="bg-accent/10 p-6 rounded-full w-24 h-24 mx-auto mb-6 group-hover:bg-accent transition">
+            <i data-feather="activity" class="w-12 h-12 text-accent group-hover:text-white"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-primary mb-3">Suivi du Troupeau</h3>
+          <p class="text-gray-600">Naissances, vaccinations, pesées, déplacements — en temps réel.</p>
+        </div>
+        <div class="text-center group" data-aos="fade-up" data-aos-delay="200">
+          <div class="bg-accent/10 p-6 rounded-full w-24 h-24 mx-auto mb-6 group-hover:bg-accent transition">
+            <i data-feather="map" class="w-12 h-12 text-accent group-hover:text-white"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-primary mb-3">Cartographie</h3>
+          <p class="text-gray-600">Rotation des pâturages, clôtures, points d’eau — sur carte interactive.</p>
+        </div>
+        <div class="text-center group" data-aos="fade-up" data-aos-delay="300">
+          <div class="bg-accent p-6 rounded-full w-24 h-24 mx-auto mb-6 ">
+            <i data-feather="dollar-sign" class="w-12 h-12 text-accent text-white"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-primary mb-3">Comptabilité</h3>
+          <p class="text-gray-600">Factures, salaires, achats, ventes — automatisé et clair.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- gallerie -->
+  <section class="py-24 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <h2 class="text-5xl md:text-6xl font-rye text-center text-primary mb-20" data-aos="fade-up">Interface Intuitive</h2>
+      <div class="swiper gallerySwiper max-w-6xl mx-auto">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide"><img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Dashboard" class="rounded-2xl shadow-2xl w-full h-96 object-cover"></div>
+          <!-- <div class="swiper-slide"><img src="https://images.unsplash.com/photo-1558655146-9f40138edfeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Mobile" class="rounded-2xl shadow-2xl w-full h-96 object-cover"></div> -->
+          <!-- <div class="swiper-slide"><img src="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Rapports" class="rounded-2xl shadow-2xl w-full h-96 object-cover"></div> -->
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- atouts -->
+  <section class="py-24 bg-white">
+    <div class="container mx-auto px-4">
+      <h2 class="text-5xl md:text-6xl font-rye text-center text-primary mb-16" data-aos="fade-up">Pourquoi choisir RanchSmart ?</h2>
+      <div class="grid md:grid-cols-3 gap-10 max-w-5xl mx-auto">
+        <div class="text-center" data-aos="fade-up" data-aos-delay="100">
+          <div class="bg-accent/10 p-6 rounded-full benefit-icon mx-auto mb-6 flex items-center justify-center">
+            <i data-feather="clock" class="w-12 h-12 text-accent"></i>
+          </div>
+          <h3 class="text-xl font-bold text-primary mb-3">Gagnez en temps</h3>
+          <p class="text-gray-600">Automatisez les tâches répétitives. Plus de paperasse.</p>
+        </div>
+        <div class="text-center" data-aos="fade-up" data-aos-delay="200">
+          <div class="bg-accent/10 p-6 rounded-full benefit-icon mx-auto mb-6 flex items-center justify-center">
+            <i data-feather="smartphone" class="w-12 h-12 text-accent"></i>
+          </div>
+          <h3 class="text-xl font-bold text-primary mb-3">Acces mobile</h3>
+          <p class="text-gray-600">Gérez votre ranch depuis votre téléphone.</p>
+        </div>
+        <div class="text-center" data-aos="fade-up" data-aos-delay="300">
+          <div class="bg-accent/10 p-6 rounded-full benefit-icon mx-auto mb-6 flex items-center justify-center">
+            <i data-feather="shield" class="w-12 h-12 text-accent"></i>
+          </div>
+          <h3 class="text-xl font-bold text-primary mb-3">Données sécurisées</h3>
+          <p class="text-gray-600">Sauvegardes quotidiennes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- etapes -->
+  <section class="py-24 bg-gradient-to-b from-gray-50 to-white">
+    <div class="container mx-auto px-4">
+      <h2 class="text-5xl md:text-6xl font-rye text-center text-primary mb-16" data-aos="fade-up">Prise en main facile</h2>
+      <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div class="bg-white p-8 rounded-2xl shadow-lg text-center step-card transition" data-aos="fade-up" data-aos-delay="100">
+          <div class="text-5xl font-bold text-accent mb-4">1</div>
+          <h3 class="text-xl font-bold text-primary mb-3">Créez votre compte</h3>
+          <p class="text-gray-600">Inscription gratuite en peu de temps.</p>
+        </div>
+        <div class="bg-white p-8 rounded-2xl shadow-lg text-center step-card transition" data-aos="fade-up" data-aos-delay="200">
+          <div class="text-5xl font-bold text-accent mb-4">2</div>
+          <h3 class="text-xl font-bold text-primary mb-3">Importez vos données</h3>
+          <p class="text-gray-600">Excel, CSV ou saisie manuelle.</p>
+        </div>
+        <div class="bg-white p-8 rounded-2xl shadow-lg text-center step-card transition" data-aos="fade-up" data-aos-delay="300">
+          <div class="text-5xl font-bold text-accent mb-4">3</div>
+          <h3 class="text-xl font-bold text-primary mb-3">Gérez en temps réel</h3>
+          <p class="text-gray-600">Depuis votre bureau.</p>
+        </div>
+      </div>
+      <div class="text-center mt-12">
+        <button onclick="openModal('signupModal')" class="bg-accent hover:bg-yellow-600 text-white font-bold py-4 px-12 rounded-full text-lg transition shadow-xl transform hover:scale-105">
+          Commencer maintenant
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!--tarifiction -->
+  <section id="pricing" class="py-24 bg-white">
+    <div class="container mx-auto px-4">
+      <h2 class="text-5xl md:text-6xl font-rye text-center text-primary mb-6" data-aos="fade-up">Choisissez votre plan</h2>
+      <!-- <p class="text-center text-gray-600 mb-16 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="100">Essai gratuit 14 jours • Annulation à tout moment</p> -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div class="bg-gray-50 p-8 rounded-2xl text-center border-2 border-transparent transition hover:scale-105" data-aos="fade-up" data-aos-delay="100">
+          <h3 class="text-2xl font-bold text-primary mb-4">Gratuit</h3>
+          <p class="text-4xl font-bold text-accent mb-6">0XAF<span class="text-lg text-gray-500">/mois</span></p>
+          <ul class="text-left mb-8 space-y-3 text-sm">
+            <li class="flex items-center">
+                <i data-feather="gift" class="w-5 h-5 text-accent mr-2"></i>
+                <span class="font-medium">Gratos 1</span>
+            </li>
+            <li class="flex items-center">
+                <i data-feather="gift" class="w-5 h-5 text-accent mr-2"></i>
+                <span class="font-medium">Gratos 2</span>
+            </li>
+            <li class="flex items-center">
+                <i data-feather="gift" class="w-5 h-5 text-accent mr-2"></i>
+                <span class="font-medium">Gratos 3</span>
+            </li>
+          </ul>
+          <button class="w-full bg-primary text-white py-3 rounded-full font-bold hover:bg-accent transition">Commencer</button>
+        </div>
+        <div class="bg-gradient-to-b from-accent/10 to-accent/5 p-8 rounded-2xl text-center border-2 border-accent shadow-xl transition scale-105" data-aos="fade-up" data-aos-delay="200">
+          <div class="bg-accent text-white text-sm font-bold py-1 px-4 rounded-full inline-block mb-4">POPULAIRE</div>
+          <h3 class="text-2xl font-bold text-primary mb-4">Pro</h3>
+          <p class="text-4xl font-bold text-accent mb-6">?XAF<span class="text-lg text-gray-500">/mois</span></p>
+          <ul class="text-left mb-8 space-y-3 text-sm">
+            <li class="flex items-center">
+                <i data-feather="gift" class="w-5 h-5 text-accent mr-2"></i>
+                <span class="font-medium">Pro 1</span>
+            </li>
+             <li class="flex items-center">
+                <i data-feather="gift" class="w-5 h-5 text-accent mr-2"></i>
+                <span class="font-medium">Pro 2</span>
+            </li>
+             <li class="flex items-center">
+                <i data-feather="gift" class="w-5 h-5 text-accent mr-2"></i>
+                <span class="font-medium">Pro 3</span>
+            </li>
+             <li class="flex items-center">
+                <i data-feather="gift" class="w-5 h-5 text-accent mr-2"></i>
+                <span class="font-medium">Pro 4</span>
+            </li>
+          </ul>
+          <button class="w-full bg-accent text-white py-3 rounded-full font-bold hover:bg-yellow-600 transition">Choisir Pro</button>
+        </div>
+        <div class="bg-gray-50 p-8 rounded-2xl text-center border-2 border-transparent transition hover:scale-105" data-aos="fade-up" data-aos-delay="300">
+          <h3 class="text-2xl font-bold text-primary mb-4">Entreprise</h3>
+          <p class="text-4xl font-bold text-accent mb-6">Sur mesure</p>
+          <ul class="text-left mb-8 space-y-3 text-sm">
+            <li class="flex items-center">
+                <i data-feather="gift" class="w-5 h-5 text-accent mr-2"></i>
+                <span class="font-medium">Ent 1</span>
+            </li>
+             <li class="flex items-center">
+                <i data-feather="gift" class="w-5 h-5 text-accent mr-2"></i>
+                <span class="font-medium">Ent 2</span>
+            </li>
+             <li class="flex items-center">
+                <i data-feather="gift" class="w-5 h-5 text-accent mr-2"></i>
+                <span class="font-medium">Ent 3</span>
+            </li>
+             <li class="flex items-center">
+                <i data-feather="gift" class="w-5 h-5 text-accent mr-2"></i>
+                <span class="font-medium">Ent 4</span>
+            </li>
+          </ul>
+          <button class="w-full bg-dark text-white py-3 rounded-full font-bold hover:bg-primary transition">Nous contacter</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-24 bg-gray-50">
+    <div class="container mx-auto px-4 max-w-3xl">
+      <h2 class="text-5xl md:text-6xl font-rye text-center text-primary mb-16" data-aos="fade-up">Que voulez vous savoir?</h2>
+      <div class="space-y-6">
+        <details class="bg-white p-6 rounded-xl shadow-md" data-aos="fade-up">
+          <summary class="font-bold text-lg cursor-pointer flex justify-between items-center">L’app fonctionne-t-elle hors ligne ? <i data-feather="chevron-down" class="w-5 h-5"></i></summary>
+          <p class="mt-4 text-gray-600">Oui ! Synchronisation automatique dès que vous retrouvez du réseau.</p>
+        </details>
+        <details class="bg-white p-6 rounded-xl shadow-md" data-aos="fade-up" data-aos-delay="100">
+          <summary class="font-bold text-lg cursor-pointer flex justify-between items-center">Puis-je importer mes données Excel ? <i data-feather="chevron-down" class="w-5 h-5"></i></summary>
+          <p class="mt-4 text-gray-600">Absolument. Import CSV/Excel en 1 clic.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- invit -->
+  <section id="demo" class="py-24 bg-gradient-to-r from-primary to-dark text-white">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-5xl md:text-6xl font-rye mb-8">Prêt à passer au numérique ?</h2>
+      <p class="text-xl mb-10 max-w-2xl mx-auto">Rejoignez les éleveurs modernes qui optimisent leur ranch.</p>
+      <button onclick="openModal('signupModal')" class="bg-accent hover:bg-yellow-600 text-white font-bold py-5 px-12 rounded-full text-xl transition shadow-2xl transform hover:scale-105 animate-pulse-slow">
+        Démarrer
+      </button>
+    </div>
+  </section>
+
+  <!-- footer -->
+  <footer class="bg-dark text-white py-12">
+    <div class="container mx-auto px-4 text-center">
+       <img src="/static/template/pages/landing/assets/Logo_P1.png" onerror="this.onerror=null;this.src='https://www.google.com/search?q=https://placehold.co/100x60/8B4513/FFFFFF%3Ftext%3DRanchSmart'" alt="RanchSmart" class="h-12 mx-auto mb-4">
+      <p class="text-sm">© 2025 RanchSmart. Fait pour les éleveurs.</p>
+    </div>
+  </footer>
+
+  <!-- popups -->
+<div id="loginModal" class="modal fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden">
+  <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 transform scale-95 transition-all">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-2xl font-rye text-primary">Connexion</h3>
+      <button onclick="closeModal('loginModal')" class="text-gray-500 hover:text-gray-700">
+        <i data-feather="x" class="w-6 h-6"></i>
+      </button>
+    </div>
+    <form id="loginForm">
+      <input type="email" id="loginEmail" placeholder="Email" class="w-full p-3 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent" required>
+      <input type="password" id="loginPassword" placeholder="Mot de passe" class="w-full p-3 mb-6 border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent" required>
+      <button type="submit" class="w-full bg-primary hover:bg-accent text-white font-bold py-3 rounded-lg transition">Se connecter</button>
+    </form>
+    <p class="text-center mt-4 text-sm">Pas de compte ? <button onclick="switchModal('loginModal', 'signupModal')" class="text-accent font-bold">S’inscrire</button></p>
+  </div>
+</div>
+
+<div id="signupModal" class="modal fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden">
+  <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 transform scale-95 transition-all">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-2xl font-rye text-primary">Inscription Gratuite</h3>
+      <button onclick="closeModal('signupModal')" class="text-gray-500 hover:text-gray-700">
+        <i data-feather="x" class="w-6 h-6"></i>
+      </button>
+    </div>
+    <form id="signupForm">
+      <input type="text" id="signupUsername" placeholder="Nom utilisateur" class="w-full p-3 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent" required>
+      <input type="email" id="signupEmail" placeholder="Email" class="w-full p-3 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent" required>
+      <input type="password" id="signupPassword" placeholder="Mot de passe" class="w-full p-3 mb-6 border rounded-lg focus:outline-none focus:ring-2 focus:ring-accent" required>
+      <button type="submit" class="w-full bg-accent hover:bg-yellow-600 text-white font-bold py-3 rounded-lg transition">Créer mon compte</button>
+    </form>
+    <p class="text-center mt-4 text-sm">Déjà inscrit ? <button onclick="switchModal('signupModal', 'loginModal')" class="text-primary font-bold">Se connecter</button></p>
+  </div>
+</div>
+
+  <!-- scripts -->
+  <script>
+    AOS.init({ duration: 800, once: true });
+    VANTA.WAVES({ el: "#vanta-bg", mouseControls: true, touchControls: true, gyroControls: false, minHeight: 200, minWidth: 200, scale: 1.0, scaleMobile: 1.0, color: 0x3a3521, shininess: 30, waveHeight: 12, waveSpeed: 0.75, zoom: 0.9 });
+
+    new Swiper('.heroSwiper', { loop: true, autoplay: { delay: 5000 }, pagination: { el: '.swiper-pagination', clickable: true }, navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' } });
+    new Swiper('.gallerySwiper', { loop: true, slidesPerView: 1, spaceBetween: 20, pagination: { el: '.swiper-pagination', clickable: true } });
+
+    function openModal(id) { const modal = document.getElementById(id); modal.classList.remove('hidden'); setTimeout(() => modal.querySelector('div').classList.replace('scale-95', 'scale-100'), 10); }
+    function closeModal(id) { const modal = document.getElementById(id); const card = modal.querySelector('div'); card.classList.replace('scale-100', 'scale-95'); setTimeout(() => modal.classList.add('hidden'), 300); }
+    function switchModal(from, to) { closeModal(from); setTimeout(() => openModal(to), 350); }
+
+    feather.replace();
+
+
+const API_BASE_URL = 'http://127.0.0.1:8000';
+
+document.addEventListener('DOMContentLoaded', () => {
+    const signupForm = document.getElementById('signupForm');
+    const loginForm = document.getElementById('loginForm');
+
+    //  formulaire d'inscription
+  
+    if (signupForm) {
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault(); 
+
+            const username = document.getElementById('signupUsername').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+
+            const userData = {
+                username: username,
+                email: email,
+                password: password,
+                role: "cowboy" 
+            };
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(userData),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert(`Inscription réussie pour l'utilisateur ${result.username}! Veuillez vous connecter.`);
+                    closeModal('signupModal');
+                    openModal('loginModal'); 
+                } else {
+                    alert(`Erreur d'inscription : ${result.detail || 'Une erreur inconnue est survenue.'}`);
+                }
+            } catch (error) {
+                console.error('Erreur lors de l\'envoi de la requête d\'inscription:', error);
+                console.log('Erreur lors de l\'envoi de la requête d\'inscription:', error);
+                console.log('Échec de la connexion au serveur. Veuillez réessayer plus tard.');
+            }
+        });
+    }
+    //  formulaire de connexion
+
+if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        
+        const requestBody = {
+            email: email,
+            password: password
+        };
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', 
+                },
+                body: JSON.stringify(requestBody),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                const token = result.access_token;
+                localStorage.setItem('ranchsmart_token', token); 
+                alert(`Connexion réussie! Bienvenue sur RanchSmart.`); 
+                closeModal('loginModal');
+
+            } else {
+                alert(`Erreur de connexion : ${result.detail || 'Vérifiez vos identifiants.'}`);
+            }
+        } catch (error) {
+            console.error('Erreur lors de l\'envoi de la requête de connexion:', error);
+            alert('Échec de la connexion au serveur. Veuillez réessayer plus tard.');
+        }
+    });
+}
+
+});
+  </script>
+</body>
+</html>
