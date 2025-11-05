@@ -17,16 +17,19 @@
   </head>
   <body>
     <!-- ======== Preloader =========== -->
-    <div id="preloader">
+    <!-- <div id="preloader">
       <div class="spinner"></div>
-    </div>
+    </div> -->
+    <div class="flex justify-center items-center py-6">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-4 border-accent border-opacity-75"></div>
+        </div>
     <!-- ======== Preloader =========== -->
 
     <!-- ======== sidebar-nav start =========== -->
     <aside class="sidebar-nav-wrapper">
       <div class="navbar-logo">
         <a href="index.html">
-          <img src="assets/images/logo/logo.svg" alt="logo" />
+          <img src="/RSmart/RanchSmart/app/assets/Logo_P1.png" alt="logo" />
         </a>
       </div>
       <nav class="sidebar-nav">
@@ -41,7 +44,9 @@
               aria-label="Toggle navigation"
             >
               <span class="icon">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
+                class="bg-accent hover:bg-yellow-600 text-white font-bold py-2 px-6 rounded-full transition shadow-md"
+                >
                   <path
                     d="M8.74999 18.3333C12.2376 18.3333 15.1364 15.8128 15.7244 12.4941C15.8448 11.8143 15.2737 11.25 14.5833 11.25H9.99999C9.30966 11.25 8.74999 10.6903 8.74999 10V5.41666C8.74999 4.7263 8.18563 4.15512 7.50586 4.27556C4.18711 4.86357 1.66666 7.76243 1.66666 11.25C1.66666 15.162 4.83797 18.3333 8.74999 18.3333Z" />
                   <path
@@ -56,6 +61,81 @@
               </li>
             </ul>
           </li>
+           <!-- NOUVELLES ENTREES DEMANDEES -->
+          <li class="nav-item nav-item-has-children">
+            <a
+              href="#0"
+              class="collapsed"
+              data-bs-toggle="collapse"
+              data-bs-target="#ddmenu_6"
+              aria-controls="ddmenu_6"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span class="icon">
+                <!-- UI Elements Icon SVG for Animaux (Collection) -->
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M1.66666 5.41669C1.66666 3.34562 3.34559 1.66669 5.41666 1.66669C7.48772 1.66669 9.16666 3.34562 9.16666 5.41669C9.16666 7.48775 7.48772 9.16669 5.41666 9.16669C3.34559 9.16669 1.66666 7.48775 1.66666 5.41669Z"
+                  />
+                  <path
+                    d="M1.66666 14.5834C1.66666 12.5123 3.34559 10.8334 5.41666 10.8334C7.48772 10.8334 9.16666 12.5123 9.16666 14.5834C9.16666 16.6545 7.48772 18.3334 5.41666 18.3334C3.34559 18.3334 1.66666 16.6545 1.66666 14.5834Z"
+                  />
+                  <path
+                    d="M10.8333 5.41669C10.8333 3.34562 12.5123 1.66669 14.5833 1.66669C16.6544 1.66669 18.3333 3.34562 18.3333 5.41669C18.3333 7.48775 16.6544 9.16669 14.5833 9.16669C12.5123 9.16669 10.8333 7.48775 10.8333 5.41669Z"
+                  />
+                  <path
+                    d="M10.8333 14.5834C10.8333 12.5123 12.5123 10.8334 14.5833 10.8334C16.6544 10.8334 18.3333 12.5123 18.3333 14.5834C18.3333 16.6545 16.6544 18.3334 14.5833 18.3334C12.5123 18.3334 10.8333 16.6545 10.8333 14.5834Z"
+                  />
+                </svg>
+              </span>
+              <span class="text">Animaux</span>
+            </a>
+            <ul id="ddmenu_6" class="collapse dropdown-nav">
+              <li>
+                <a href="cards.html"> Liste des animaux </a>
+              </li>
+              <li>
+                <a href="animals-add.html"> Ajouter un animal </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="nav-item">
+            <a href="enclosures.html">
+              <span class="icon">
+                <!-- Tables Icon SVG for Enclos (Area/Grid) -->
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M1.66666 4.16667C1.66666 3.24619 2.41285 2.5 3.33332 2.5H16.6667C17.5872 2.5 18.3333 3.24619 18.3333 4.16667V9.16667C18.3333 10.0872 17.5872 10.8333 16.6667 10.8333H3.33332C2.41285 10.8333 1.66666 10.0872 1.66666 9.16667V4.16667Z"
+                  />
+                  <path
+                    d="M1.875 13.75C1.875 13.4048 2.15483 13.125 2.5 13.125H17.5C17.8452 13.125 18.125 13.4048 18.125 13.75C18.125 14.0952 17.8452 14.375 17.5 14.375H2.5C2.15483 14.375 1.875 14.0952 1.875 13.75Z"
+                  />
+                  <path
+                    d="M2.5 16.875C2.15483 16.875 1.875 17.1548 1.875 17.5C1.875 17.8452 2.15483 18.125 2.5 18.125H17.5C17.8452 18.125 18.125 17.8452 18.125 17.5C18.125 17.1548 17.8452 16.875 17.5 16.875H2.5Z"
+                  />
+                </svg>
+              </span>
+              <span class="text">Enclos</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="staff.html">
+              <span class="icon">
+                <!-- Forms Icon SVG for Staff (Records) -->
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M4.16666 3.33335C4.16666 2.41288 4.91285 1.66669 5.83332 1.66669H14.1667C15.0872 1.66669 15.8333 2.41288 15.8333 3.33335V16.6667C15.8333 17.5872 15.0872 18.3334 14.1667 18.3334H5.83332C4.91285 18.3334 4.16666 17.5872 4.16666 16.6667V3.33335ZM6.04166 5.00002C6.04166 5.3452 6.32148 5.62502 6.66666 5.62502H13.3333C13.6785 5.62502 13.9583 5.3452 13.9583 5.00002C13.9583 4.65485 13.6785 4.37502 13.3333 4.37502H6.66666C6.32148 4.37502 6.04166 4.65485 6.04166 5.00002ZM6.66666 6.87502C6.32148 6.87502 6.04166 7.15485 6.04166 7.50002C6.04166 7.8452 6.32148 8.12502 6.66666 8.12502H13.3333C13.6785 8.12502 13.9583 7.8452 13.9583 7.50002C13.9583 7.15485 13.6785 6.87502 13.3333 6.87502H6.66666ZM6.04166 10C6.04166 10.3452 6.32148 10.625 6.66666 10.625H9.99999C10.3452 10.625 10.625 10.3452 10.625 10C10.625 9.65485 10.3452 9.37502 9.99999 9.37502H6.66666C6.32148 9.37502 6.04166 9.65485 6.04166 10ZM9.99999 16.6667C10.9205 16.6667 11.6667 15.9205 11.6667 15C11.6667 14.0795 10.9205 13.3334 9.99999 13.3334C9.07949 13.3334 8.33332 14.0795 8.33332 15C8.33332 15.9205 9.07949 16.6667 9.99999 16.6667Z"
+                  />
+                </svg>
+              </span>
+              <span class="text">Staff</span>
+            </a>
+          </li>
+          <!-- FIN NOUVELLES ENTREES DEMANDEES -->
+
           <li class="nav-item nav-item-has-children">
             <a
               href="#0"
@@ -239,6 +319,7 @@
               <span class="text">Tables</span>
             </a>
           </li>
+
           <span class="divider"><hr /></span>
 
           <li class="nav-item">

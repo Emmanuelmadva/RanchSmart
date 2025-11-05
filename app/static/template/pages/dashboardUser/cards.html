@@ -13,8 +13,67 @@
     <link rel="stylesheet" href="assets/css/materialdesignicons.min.css" />
     <link rel="stylesheet" href="assets/css/fullcalendar.css" />
     <link rel="stylesheet" href="assets/css/main.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
   </head>
   <body>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#059669', // Vert Emeraude
+                        'secondary': '#10b981', // Vert un peu plus clair
+                        'bg-light': '#f7f9fc',
+                        'card-bg': '#ffffff',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Styles personnalisés pour les cartes et les boutons */
+        .card-style-5 {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+        .card-style-5:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        }
+        .main-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: background-color 0.2s, box-shadow 0.2s;
+        }
+        .primary-btn {
+            background-color: transparent;
+            border: 2px solid #059669;
+            color: #059669;
+        }
+        .primary-btn:hover {
+            background-color: #059669;
+            color: white;
+        }
+        .success-btn {
+            background-color: #059669;
+            color: white;
+        }
+        .success-btn:hover {
+            background-color: #047857;
+        }
+        /* Style pour l'image du placeholder */
+        .card-image img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+    </style>
     <!-- ======== Preloader =========== -->
     <div id="preloader">
       <div class="spinner"></div>
@@ -467,422 +526,397 @@
           </div>
         </div>
       </header>
-      <!-- ========== header end ========== -->
 
-      <!-- ========== card components start ========== -->
-      <section class="card-components">
-        <div class="container-fluid">
-          <!-- ========== title-wrapper start ========== -->
-          <div class="title-wrapper pt-30">
-            <div class="row align-items-center">
-              <div class="col-md-6">
-                <div class="title">
-                  <h2>Cards</h2>
-                </div>
-              </div>
-              <!-- end col -->
-              <div class="col-md-6">
-                <div class="breadcrumb-wrapper">
-                  <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                      <li class="breadcrumb-item">
-                        <a href="#0">Dashboard</a>
-                      </li>
-                      <li class="breadcrumb-item">
-                        <a href="#0">UI Components</a>
-                      </li>
-                      <li class="breadcrumb-item active" aria-current="page">
-                        Cards
-                      </li>
-                    </ol>
-                  </nav>
-                </div>
-              </div>
-              <!-- end col -->
+      <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+
+                        'primary': '#059669',
+                        'secondary': '#10b981',
+                        'bg-light': '#f7f9fc',
+                        'card-bg': '#ffffff',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .card-style-5 {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+        .card-style-5:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        }
+        .main-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: background-color 0.2s, box-shadow 0.2s;
+        }
+        .primary-btn {
+            background-color: transparent;
+            border: 2px solid #2F1B12;
+            color: #2F1B12;
+        }
+        .primary-btn:hover {
+            border: none;
+            background-color: #8B4513;
+            color: white;
+        }
+        p{
+          color: #8B4513;
+        }
+        .success-btn {
+            background-color: #059669;
+            color: white;
+        }
+        .success-btn:hover {
+            background-color: #047857;
+        }
+        .card-image img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+    </style>
+</head>
+<body class="bg-bg-light font-sans antialiased">
+
+   <div id="addAnimalModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+  <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+    <div class="fixed inset-0 bg-gray-900 bg-opacity-60 backdrop-blur-sm transition-opacity" onclick="toggleModal()"></div>
+
+    <div class="inline-block w-full max-w-2xl p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-2xl rounded-2xl">
+
+      <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center space-x-3">
+          <div class="relative">
+            <div class="w-12 h-12 rounded-full bg-primary/15 flex items-center justify-center animate-pulse">
+              <svg class="w-7 h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
             </div>
-            <!-- end row -->
+            <div class="absolute -top-1 -right-1 w-4 h-4 bg-secondary rounded-full animate-ping"></div>
+            <div class="absolute -top-1 -right-1 w-4 h-4 bg-secondary rounded-full"></div>
           </div>
-          <!-- ========== title-wrapper end ========== -->
-
-          <!-- ========== cards-styles start ========== -->
-          <div class="cards-styles">
-            <!-- ========= card-style-1 start ========= -->
-            <div class="row">
-              <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
-                <div class="card-style-1 mb-30">
-                  <div class="card-meta">
-                    <div class="image">
-                      <img src="assets/images/cards/card-style-1/admin-1.png" alt="" />
-                    </div>
-                    <div class="text">
-                      <p class="text-sm text-medium">
-                        Posted by : <a href="#0">Hammad</a>
-                      </p>
-                    </div>
-                  </div>
-                  <div class="card-image">
-                    <a href="#0">
-                      <img src="assets/images/cards/card-style-1/card-1.jpg" alt="" />
-                    </a>
-                  </div>
-                  <div class="card-content">
-                    <h4><a href="#0"> Card Title here </a></h4>
-                    <p>
-                      With supporting text below as a natural lead-in to
-                      additional content. consectetur adipiscing elit. Integer
-                      posuere erat a ante.
-                    </p>
-                  </div>
-                </div>
-                <!-- end card-->
-              </div>
-              <!-- end col -->
-              <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
-                <div class="card-style-1 mb-30">
-                  <div class="card-meta">
-                    <div class="image">
-                      <img src="assets/images/cards/card-style-1/admin-2.png" alt="" />
-                    </div>
-                    <div class="text">
-                      <p class="text-sm text-medium">
-                        Posted by : <a href="#0">Mahmud</a>
-                      </p>
-                    </div>
-                  </div>
-                  <div class="card-image">
-                    <a href="#0">
-                      <img src="assets/images/cards/card-style-1/card-2.jpg" alt="" />
-                    </a>
-                  </div>
-                  <div class="card-content">
-                    <h4><a href="#0"> Card Title here </a></h4>
-                    <p>
-                      With supporting text below as a natural lead-in to
-                      additional content. consectetur adipiscing elit. Integer
-                      posuere erat a ante.
-                    </p>
-                  </div>
-                </div>
-                <!-- end card-->
-              </div>
-              <!-- end col -->
-              <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
-                <div class="card-style-1 mb-30">
-                  <div class="card-meta">
-                    <div class="image">
-                      <img src="assets/images/cards/card-style-1/admin-3.png" alt="" />
-                    </div>
-                    <div class="text">
-                      <p class="text-sm text-medium">
-                        Posted by : <a href="#0">Jamil Kareem</a>
-                      </p>
-                    </div>
-                  </div>
-                  <div class="card-image">
-                    <a href="#0">
-                      <img src="assets/images/cards/card-style-1/card-3.jpg" alt="" />
-                    </a>
-                  </div>
-                  <div class="card-content">
-                    <h4><a href="#0"> Card Title here </a></h4>
-                    <p>
-                      With supporting text below as a natural lead-in to
-                      additional content. consectetur adipiscing elit. Integer
-                      posuere erat a ante.
-                    </p>
-                  </div>
-                </div>
-                <!-- end card-->
-              </div>
-              <!-- end col -->
-            </div>
-            <!-- end row -->
-            <!-- ========= card-style-1 end ========= -->
-
-            <!-- ========= card-style-2 start ========= -->
-            <div class="row">
-              <div class="col-12">
-                <div class="title mt-30 mb-30">
-                  <h2>Cards</h2>
-                </div>
-              </div>
-              <!-- end col -->
-              <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
-                <div class="card-style-2 mb-30">
-                  <div class="card-image">
-                    <a href="#0">
-                      <img src="assets/images/cards/card-style-2/card-1.jpg" alt="" />
-                    </a>
-                  </div>
-                  <div class="card-content">
-                    <h4><a href="#0">Card Title here </a></h4>
-                    <p>
-                      With supporting text below as a natural lead-in to
-                      additional content. consectetur adipiscing elit. Integer
-                      posuere erat a ante.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <!-- end col -->
-              <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
-                <div class="card-style-2 mb-30">
-                  <div class="card-image">
-                    <a href="#0">
-                      <img src="assets/images/cards/card-style-2/card-2.jpg" alt="" />
-                    </a>
-                  </div>
-                  <div class="card-content">
-                    <h4><a href="#0">Card Title here </a></h4>
-                    <p>
-                      With supporting text below as a natural lead-in to
-                      additional content. consectetur adipiscing elit. Integer
-                      posuere erat a ante.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <!-- end col -->
-              <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
-                <div class="card-style-2 mb-30">
-                  <div class="card-image">
-                    <a href="#0">
-                      <img src="assets/images/cards/card-style-2/card-3.jpg" alt="" />
-                    </a>
-                  </div>
-                  <div class="card-content">
-                    <h4><a href="#0">Card Title here </a></h4>
-                    <p>
-                      With supporting text below as a natural lead-in to
-                      additional content. consectetur adipiscing elit. Integer
-                      posuere erat a ante.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <!-- end col -->
-            </div>
-            <!-- end row -->
-            <!-- ========= card-style-2 end ========= -->
-
-            <!-- ========= card-style-3 start ========= -->
-            <div class="row">
-              <div class="col-12">
-                <div class="title mt-30 mb-30">
-                  <h2>Cards</h2>
-                </div>
-              </div>
-              <!-- end col -->
-              <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
-                <div class="card-style-3 mb-30">
-                  <div class="card-content">
-                    <h4><a href="#0">Card Title here </a></h4>
-                    <p>
-                      With supporting text below as a natural lead-in to
-                      additional content. consectetur adipiscing elit. Integer
-                      posuere erat a ante. With supporting text below as a
-                      natural lead-in to additional content. consectetur
-                      adipiscing elit. Integer posuere erat a ante.
-                    </p>
-                    <a href="#0" class="read-more">Read More</a>
-                  </div>
-                </div>
-              </div>
-              <!-- end col -->
-              <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
-                <div class="card-style-3 mb-30">
-                  <div class="card-content">
-                    <h4><a href="#0">Card Title here </a></h4>
-                    <p>
-                      With supporting text below as a natural lead-in to
-                      additional content. consectetur adipiscing elit. Integer
-                      posuere erat a ante. With supporting text below as a
-                      natural lead-in to additional content. consectetur
-                      adipiscing elit. Integer posuere erat a ante.
-                    </p>
-                    <a href="#0" class="read-more">Read More</a>
-                  </div>
-                </div>
-              </div>
-              <!-- end col -->
-              <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
-                <div class="card-style-3 mb-30">
-                  <div class="card-content">
-                    <h4><a href="#0">Card Title here </a></h4>
-                    <p>
-                      With supporting text below as a natural lead-in to
-                      additional content. consectetur adipiscing elit. Integer
-                      posuere erat a ante. With supporting text below as a
-                      natural lead-in to additional content. consectetur
-                      adipiscing elit. Integer posuere erat a ante.
-                    </p>
-                    <a href="#0" class="read-more">Read More</a>
-                  </div>
-                </div>
-              </div>
-              <!-- end col -->
-            </div>
-            <!-- end row -->
-            <!-- ========= card-style-3 end ========= -->
-
-            <!-- ========= card-style-4 start ========= -->
-            <div class="row">
-              <div class="col-12">
-                <div class="title mt-30 mb-30">
-                  <h2>Cards</h2>
-                </div>
-              </div>
-              <!-- end col -->
-              <div class="col-xl-4 col-lg-4 col-md-6">
-                <div class="card-style-4 mb-30">
-                  <div class="card-image">
-                    <a href="#0">
-                      <img src="assets/images/cards/card-style-4/card-1.png" alt="" />
-                    </a>
-                  </div>
-                  <div class="card-content">
-                    <h4><a href="#0">Card Title here </a></h4>
-                    <p>
-                      With supporting text below as a natural lead-in to
-                      additional content. consectetur adipiscing elit. Integer
-                      posuere erat a ante.
-                    </p>
-                    <a href="#0" class="read-more">Read More</a>
-                  </div>
-                </div>
-              </div>
-              <!-- end col -->
-              <div class="col-xl-4 col-lg-4 col-md-6">
-                <div class="card-style-4 mb-30">
-                  <div class="card-image">
-                    <a href="#0">
-                      <img src="assets/images/cards/card-style-4/card-2.png" alt="" />
-                    </a>
-                  </div>
-                  <div class="card-content">
-                    <h4><a href="#0">Card Title here </a></h4>
-                    <p>
-                      With supporting text below as a natural lead-in to
-                      additional content. consectetur adipiscing elit. Integer
-                      posuere erat a ante.
-                    </p>
-                    <a href="#0" class="read-more">Read More</a>
-                  </div>
-                </div>
-              </div>
-              <!-- end col -->
-              <div class="col-xl-4 col-lg-4 col-md-6">
-                <div class="card-style-4 mb-30">
-                  <div class="card-image">
-                    <a href="#0">
-                      <img src="assets/images/cards/card-style-4/card-3.png" alt="" />
-                    </a>
-                  </div>
-                  <div class="card-content">
-                    <h4><a href="#0">Card Title here </a></h4>
-                    <p>
-                      With supporting text below as a natural lead-in to
-                      additional content. consectetur adipiscing elit. Integer
-                      posuere erat a ante.
-                    </p>
-                    <a href="#0" class="read-more">Read More</a>
-                  </div>
-                </div>
-              </div>
-              <!-- end col -->
-            </div>
-            <!-- end row -->
-            <!-- ========= card-style-4 end ========= -->
-
-            <!-- ========= card-style-5 start ========= -->
-            <div class="row">
-              <div class="col-12">
-                <div class="title mt-30 mb-30">
-                  <h2>Cards</h2>
-                </div>
-              </div>
-              <!-- end col -->
-              <div class="col-xl-6 col-lg-6">
-                <div class="card-style-5 mb-30">
-                  <div class="card-image">
-                    <a href="#0">
-                      <img src="assets/images/cards/card-style-5/card-1.jpg" alt="" />
-                    </a>
-                  </div>
-                  <div class="card-content">
-                    <h4><a href="#0">Card Title here </a></h4>
-                    <p>
-                      With supporting text below as a natural lead-in to
-                      additional content. consectetur adipiscing elit. Integer
-                      posuere erat a ante.
-                    </p>
-                    <a href="#0" class="main-btn primary-btn btn-hover">Read More</a>
-                  </div>
-                </div>
-                <!-- end card -->
-              </div>
-              <!-- end col -->
-              <div class="col-xl-6 col-lg-6">
-                <div class="card-style-5 mb-30">
-                  <div class="card-image">
-                    <a href="#0">
-                      <img src="assets/images/cards/card-style-5/card-2.jpg" alt="" />
-                    </a>
-                  </div>
-                  <div class="card-content">
-                    <h4><a href="#0">Card Title here </a></h4>
-                    <p>
-                      With supporting text below as a natural lead-in to
-                      additional content. consectetur adipiscing elit. Integer
-                      posuere erat a ante.
-                    </p>
-                    <a href="#0" class="main-btn primary-btn btn-hover">Read More</a>
-                  </div>
-                </div>
-                <!-- end card -->
-              </div>
-              <!-- end col -->
-            </div>
-            <!-- end row -->
-            <!-- ========= card-style-5 end ========= -->
+          <div>
+            <h3 class="text-2xl font-bold text-gray-900">Nouvel Animal</h3>
+            <p class="text-sm text-[#8B4513]">Ajoutez un nouvel animal à votre Ranch</p>
           </div>
-          <!-- ========== cards-styles end ========== -->
         </div>
-        <!-- end container -->
-      </section>
-      <!-- ========== card components end ========== -->
+        <button onclick="toggleModal()" class="text-gray-400 hover:text-gray-600 transition">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
 
-      <!-- ========== footer start =========== -->
-      <footer class="footer">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-md-6 order-last order-md-first">
-              <div class="copyright text-center text-md-start">
-                <p class="text-sm">
-                  Designed and Developed by
-                  <a href="https://plainadmin.com" rel="nofollow" target="_blank">
-                    PlainAdmin
-                  </a>
-                </p>
+      <form id="addAnimalForm" onsubmit="event.preventDefault(); handleSubmit()" class="space-y-5">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="relative">
+            <input type="text" name="name" id="name" required
+                   class="peer w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition placeholder-transparent"
+                   placeholder="Nom">
+            <label for="name" class="absolute left-4 -top-2.5 px-1 text-sm font-medium text-[#8B4513] bg-white transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-3.5 peer-focus:-top-2.5 peer-focus:text-sm">
+              Nom de l'animal *
+            </label>
+          </div>
+
+          <div class="relative">
+            <input type="text" name="species" id="species" required
+                   class="peer w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition placeholder-transparent"
+                   placeholder="Espèce">
+            <label for="species" class="absolute left-4 -top-2.5 px-1 text-sm font-medium text-[#8B4513] bg-white transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-3.5 peer-focus:-top-2.5 peer-focus:text-sm">
+              Espèce *
+            </label>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="relative">
+            <input type="number" name="age" id="age" min="0"
+                   class="peer w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition placeholder-transparent"
+                   placeholder="Âge">
+            <label for="age" class="absolute left-4 -top-2.5 px-1 text-sm font-medium text-[#8B4513] bg-white transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-3.5 peer-focus:-top-2.5 peer-focus:text-sm">
+              Âge (années)
+            </label>
+          </div>
+
+          <div class="relative">
+            <input type="number" name="weight" id="weight" step="0.1" min="0"
+                   class="peer w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition placeholder-transparent"
+                   placeholder="Poids">
+            <label for="weight" class="absolute left-4 -top-2.5 px-1 text-sm font-medium text-[#8B4513] bg-white transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-3.5 peer-focus:-top-2.5 peer-focus:text-sm">
+              Poids (kg)
+            </label>
+          </div>
+        </div>
+
+        <div class="relative">
+          <input type="text" name="health_status" id="health_status" value="Bonne santé"
+                 class="peer w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition placeholder-transparent">
+          <label for="health_status" class="absolute left-4 -top-2.5 px-1 text-sm font-medium text-[#8B4513] bg-white transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-3.5 peer-focus:-top-2.5 peer-focus:text-sm">
+            État de santé
+          </label>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="relative">
+            <input type="date" name="last_vaccination" id="last_vaccination"
+                   class="peer w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition">
+            <label for="last_vaccination" class="absolute left-4 -top-2.5 px-1 text-sm font-medium text-[#8B4513] bg-white transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-3.5 peer-focus:-top-2.5 peer-focus:text-sm">
+              Dernière vaccination
+            </label>
+          </div>
+
+          <div class="relative">
+            <input type="number" name="enclosure_id" id="enclosure_id" min="1"
+                   class="peer w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition placeholder-transparent"
+                   placeholder="ID Enclos">
+            <label for="enclosure_id" class="absolute left-4 -top-2.5 px-1 text-sm font-medium text-[#8B4513] bg-white transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-3.5 peer-focus:-top-2.5 peer-focus:text-sm">
+              ID de l'enclos
+            </label>
+          </div>
+        </div>
+
+        <div class="mt-6">
+          <label class="block text-sm font-medium text-[#8B4513] mb-2">Photo de profil</label>
+          <div class="flex items-center justify-center w-full">
+            <label for="file" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-primary/30 rounded-xl cursor-pointer bg-primary/5 hover:bg-primary/10 transition">
+              <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                <svg class="w-10 h-10 text-primary mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                </svg>
+                <p class="text-xs text-gray-600">Cliquez pour uploader</p>
               </div>
-            </div>
-            <!-- end col-->
-            <div class="col-md-6">
-              <div class="terms d-flex justify-content-center justify-content-md-end">
-                <a href="#0" class="text-sm">Term & Conditions</a>
-                <a href="#0" class="text-sm ml-15">Privacy & Policy</a>
+              <input id="file" name="file" type="file" accept="image/*" class="hidden">
+            </label>
+
+        <div id="messageBox" class="p-3 text-sm rounded-lg hidden transition-all"></div>
+
+        <div class="flex flex-col sm:flex-row-reverse gap-3 mt-8">
+          <button type="submit" class="main-btn success-btn w-full sm:w-auto flex items-center justify-center gap-2 group">
+            <svg class="w-5 h-5 group-hover:animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            Enregistrer l'animal
+          </button>
+          <button type="button" onclick="toggleModal()" class="px-6 py-3 text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition font-medium">
+            Annuler
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+    <section class="card-components py-8">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="row flex flex-wrap -mx-4">
+          <div class="w-full px-4">
+            <div class="flex justify-between items-center mt-8 mb-8">
+              <div class="title">
+                <h2 class="text-3xl font-bold text-gray-800">Animaux Enregistrés</h2>
+                <p id="loadingIndicator" class="text-sm text-gray-500 hidden">Chargement des données...</p>
               </div>
+              <button id="addAnimalBtn" type="button" onclick="toggleModal()" class="main-btn success-btn btn-hover">
+                + Ajouter
+              </button>
             </div>
           </div>
-          <!-- end row -->
+          <div id="animalCardsContainer" class="w-full flex flex-wrap -mx-4">
+              <p class="w-full px-4 text-center text-gray-500" id="emptyState">Aucun animal enregistré. Cliquez sur '+ Ajouter' pour commencer.</p>
+          </div>
         </div>
-        <!-- end container -->
+      </div>
+    </section>
+
+    <script>
+        const API_BASE_URL = 'http://127.0.0.1:8000'
+        const UPLOAD_DIR_PATH = '/app/static/assets/animals';
+
+        // --- messages succes/erreur ---
+
+        function showMessage(message, type = 'success') {
+            const box = document.getElementById('messageBox');
+            box.textContent = message;
+            box.classList.remove('hidden', 'bg-red-100', 'text-red-700', 'bg-green-100', 'text-green-700');
+            box.classList.add(type === 'error' ? 'bg-red-100' : 'bg-green-100', type === 'error' ? 'text-red-700' : 'text-green-700');
+            setTimeout(() => box.classList.add('hidden'), 5000);
+        }
+
+        function toggleModal() {
+            const modal = document.getElementById('addAnimalModal');
+            modal.classList.toggle('hidden');
+            document.getElementById('addAnimalForm').reset();
+            document.getElementById('messageBox').classList.add('hidden');
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            try {
+                return new Date(dateString).toLocaleDateString('fr-FR', {
+                    year: 'numeric', month: 'long', day: 'numeric'
+                });
+            } catch (e) {
+                return dateString;
+            }
+        }
+
+        // --- logique de rendu ---
+
+        function createAnimalCard(animal) {
+            const imageUrl = animal.profile_image ? `${API_BASE_URL}${animal.profile_image}` : `https://placehold.co/600x400/878787/ffffff?text=${animal.name || 'Animal'}`;
+            const statusColor = animal.health_status.toLowerCase().includes('healthy') || animal.health_status.toLowerCase().includes('bonne') ? 'text-green-600' : 'text-yellow-600';
+
+            const cardHtml = `
+                <div class="w-full md:w-1/2 lg:w-1/3 xl:w-1/2 px-4 mb-8">
+                    <div class="card-style-5 mb-8 bg-card-bg rounded-lg overflow-hidden">
+                        <div class="card-image">
+                            <a href="#animal-${animal.id}">
+                                <img src="${imageUrl}" alt="${animal.name} de l'espèce ${animal.species}"
+                                     onerror="this.onerror=null;this.src='https://placehold.co/600x400/878787/ffffff?text=Image+indisponible';" />
+                            </a>
+                        </div>
+                        <div class="card-content p-6">
+                            <h4 class="text-amber-600 font-semibold mb-2 flex justify-between items-start">
+                               ${animal.name} (${animal.species})
+
+                            </h4>
+                            <p class="text-sm mb-1 text-gray-700">
+                                <strong>Âge:</strong> ${animal.age !== null ? animal.age + ' ans' : 'Inconnu'}
+                            </p>
+                            <p class="text-sm mb-1 text-gray-700">
+                                <strong>Poids:</strong> ${animal.weight !== null ? animal.weight + ' kg' : 'Inconnu'}
+                            </p>
+                            <p class="text-sm mb-4 text-gray-700">
+                                <strong>Enclos ID:</strong> ${animal.enclosure_id !== null ? animal.enclosure_id : 'Non assigné'}
+                            </p>
+                            <p class="text-xs mb-4 ${statusColor}">
+                                <strong>Statut:</strong> ${animal.health_status} |
+                                <strong>Vaccin:</strong> ${formatDate(animal.last_vaccination)}
+                            </p>
+                            <a href="#details-${animal.id}" class="main-btn primary-btn btn-hover text-sm">Modifier</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+            return cardHtml;
+        }
+
+        function renderAnimals(animals) {
+            const container = document.getElementById('animalCardsContainer');
+            const emptyState = document.getElementById('emptyState');
+            container.innerHTML = ''; // Clear existing content
+
+            if (animals.length === 0) {
+                emptyState.classList.remove('hidden');
+                container.appendChild(emptyState);
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            animals.forEach(animal => {
+                container.insertAdjacentHTML('beforeend', createAnimalCard(animal));
+            });
+        }
+
+        // --- appel des api ---
+
+        async function fetchAnimals() {
+            const indicator = document.getElementById('loadingIndicator');
+            indicator.classList.remove('hidden');
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/animals/`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const animals = await response.json();
+                renderAnimals(animals);
+            } catch (error) {
+                console.error("Erreur lors du chargement des animaux:", error);
+                const container = document.getElementById('animalCardsContainer');
+                container.innerHTML = `<p class="w-full px-4 text-center text-red-600">Erreur de connexion à l'API (${API_BASE_URL}/animals/). Veuillez vérifier que FastAPI est démarré.</p>`;
+            } finally {
+                indicator.classList.add('hidden');
+            }
+        }
+
+        async function handleSubmit() {
+            const form = document.getElementById('addAnimalForm');
+            const messageBox = document.getElementById('messageBox');
+            messageBox.classList.add('hidden');
+
+            const formData = new FormData();
+
+            const name = form.elements['name'].value.trim();
+            const species = form.elements['species'].value.trim();
+
+            if (!name || !species) {
+                showMessage("Le nom et l'espèce sont obligatoires.", 'error');
+                return;
+            }
+
+            formData.append('name', name);
+            formData.append('species', species);
+
+            const age = form.elements['age'].value;
+            if (age) formData.append('age', parseInt(age));
+
+            const weight = form.elements['weight'].value;
+            if (weight) formData.append('weight', parseFloat(weight));
+
+            const healthStatus = form.elements['health_status'].value;
+            formData.append('health_status', healthStatus || "Bonne santé");
+
+            const lastVaccination = form.elements['last_vaccination'].value;
+            if (lastVaccination) formData.append('last_vaccination', lastVaccination);
+
+            const enclosureId = form.elements['enclosure_id'].value;
+            if (enclosureId) formData.append('enclosure_id', parseInt(enclosureId));
+
+            const fileInput = form.elements['file'];
+            if (fileInput.files.length > 0) {
+                formData.append('file', fileInput.files[0]);
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/animals/`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    const errorDetail = result.detail || "Erreur inconnue lors de l'enregistrement.";
+                    throw new Error(errorDetail);
+                }
+
+                showMessage(`Animal "${result.name}" ajouté avec succès (ID: ${result.id})!`, 'success');
+                toggleModal();
+                fetchAnimals();
+
+            } catch (error) {
+                console.error("Erreur d'enregistrement:", error);
+                showMessage(`Échec de l'enregistrement: ${error.message || error}`, 'error');
+            }
+        }
+
+        window.onload = fetchAnimals;
+    </script>
       </footer>
-      <!-- ========== footer end =========== -->
     </main>
-    <!-- ======== main-wrapper end =========== -->
-
-    <!-- ========= All Javascript files linkup ======== -->
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/Chart.min.js"></script>
     <script src="assets/js/dynamic-pie-chart.js"></script>
