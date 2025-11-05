@@ -1,930 +1,467 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="assets/images/favicon.svg" type="image/x-icon" />
-    <title>Cards | PlainAdmin Demo</title>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Animaux | RanchSmart</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#8B4513',    
+            accent: '#DAA520',     
+            dark: '#2F1B12',
+            success: '#10B981',
+            warning: '#F59E0B',
+            danger: '#EF4444',
+            muted: '#6B7280',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.3s ease-out',
+            'slide-up': 'slideUp 0.4s ease-out',
+            'pulse-soft': 'pulseSoft 2s infinite',
+          },
+          keyframes: {
+            fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+            slideUp: { '0%': { transform: 'translateY(20px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
+            pulseSoft: { '0%, 100%': { opacity: '1' }, '50%': { opacity: '0.8' } },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #f3f4f6; }
+    ::-webkit-scrollbar-thumb { background: #DAA520; border-radius: 3px; }
+  </style>
+  <style>
+  .skeleton {
+    @apply bg-gray-200 rounded-lg animate-pulse;
+  }
+  .skeleton-text { @apply h-4 w-full skeleton; }
+  .skeleton-text-short { @apply h-4 w-3/4 skeleton; }
+  .skeleton-circle { @apply w-12 h-12 rounded-full skeleton; }
+  .skeleton-image { @apply w-full h-48 rounded-xl skeleton; }
+  .skeleton-button { @apply h-10 w-full rounded-lg skeleton; }
 
-    <!-- ========== All CSS files linkup ========= -->
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="assets/css/lineicons.css" />
-    <link rel="stylesheet" href="assets/css/materialdesignicons.min.css" />
-    <link rel="stylesheet" href="assets/css/fullcalendar.css" />
-    <link rel="stylesheet" href="assets/css/main.css" />
-    <script src="https://cdn.tailwindcss.com"></script>
-
-  </head>
-  <body>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'primary': '#059669', // Vert Emeraude
-                        'secondary': '#10b981', // Vert un peu plus clair
-                        'bg-light': '#f7f9fc',
-                        'card-bg': '#ffffff',
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        /* Styles personnalisés pour les cartes et les boutons */
-        .card-style-5 {
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-        }
-        .card-style-5:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-        }
-        .main-btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            transition: background-color 0.2s, box-shadow 0.2s;
-        }
-        .primary-btn {
-            background-color: transparent;
-            border: 2px solid #059669;
-            color: #059669;
-        }
-        .primary-btn:hover {
-            background-color: #059669;
-            color: white;
-        }
-        .success-btn {
-            background-color: #059669;
-            color: white;
-        }
-        .success-btn:hover {
-            background-color: #047857;
-        }
-        /* Style pour l'image du placeholder */
-        .card-image img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            border-radius: 0.5rem 0.5rem 0 0;
-        }
-    </style>
-    <!-- ======== Preloader =========== -->
-    <div id="preloader">
-      <div class="spinner"></div>
-    </div>
-    <!-- ======== Preloader =========== -->
-
-    <!-- ======== sidebar-nav start =========== -->
-    <aside class="sidebar-nav-wrapper">
-      <div class="navbar-logo">
-        <a href="index.html">
-          <img src="assets/images/logo/logo.svg" alt="logo" />
-        </a>
-      </div>
-      <nav class="sidebar-nav">
-        <ul>
-          <li class="nav-item nav-item-has-children">
-            <a
-              href="#0"
-              class="collapsed"
-              data-bs-toggle="collapse"
-              data-bs-target="#ddmenu_1"
-              aria-controls="ddmenu_1"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <span class="icon">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M8.74999 18.3333C12.2376 18.3333 15.1364 15.8128 15.7244 12.4941C15.8448 11.8143 15.2737 11.25 14.5833 11.25H9.99999C9.30966 11.25 8.74999 10.6903 8.74999 10V5.41666C8.74999 4.7263 8.18563 4.15512 7.50586 4.27556C4.18711 4.86357 1.66666 7.76243 1.66666 11.25C1.66666 15.162 4.83797 18.3333 8.74999 18.3333Z" />
-                  <path
-                    d="M17.0833 10C17.7737 10 18.3432 9.43708 18.2408 8.75433C17.7005 5.14918 14.8508 2.29947 11.2457 1.75912C10.5629 1.6568 10 2.2263 10 2.91665V9.16666C10 9.62691 10.3731 10 10.8333 10H17.0833Z" />
-                </svg>
-              </span>
-              <span class="text">Dashboard</span>
-            </a>
-            <ul id="ddmenu_1" class="collapse dropdown-nav">
-              <li>
-                <a href="index.html"> eCommerce </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item nav-item-has-children">
-            <a
-              href="#0"
-              class="collapsed"
-              data-bs-toggle="collapse"
-              data-bs-target="#ddmenu_2"
-              aria-controls="ddmenu_2"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <span class="icon">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M11.8097 1.66667C11.8315 1.66667 11.8533 1.6671 11.875 1.66796V4.16667C11.875 5.43232 12.901 6.45834 14.1667 6.45834H16.6654C16.6663 6.48007 16.6667 6.50186 16.6667 6.5237V16.6667C16.6667 17.5872 15.9205 18.3333 15 18.3333H5.00001C4.07954 18.3333 3.33334 17.5872 3.33334 16.6667V3.33334C3.33334 2.41286 4.07954 1.66667 5.00001 1.66667H11.8097ZM6.66668 7.70834C6.3215 7.70834 6.04168 7.98816 6.04168 8.33334C6.04168 8.67851 6.3215 8.95834 6.66668 8.95834H10C10.3452 8.95834 10.625 8.67851 10.625 8.33334C10.625 7.98816 10.3452 7.70834 10 7.70834H6.66668ZM6.04168 11.6667C6.04168 12.0118 6.3215 12.2917 6.66668 12.2917H13.3333C13.6785 12.2917 13.9583 12.0118 13.9583 11.6667C13.9583 11.3215 13.6785 11.0417 13.3333 11.0417H6.66668C6.3215 11.0417 6.04168 11.3215 6.04168 11.6667ZM6.66668 14.375C6.3215 14.375 6.04168 14.6548 6.04168 15C6.04168 15.3452 6.3215 15.625 6.66668 15.625H13.3333C13.6785 15.625 13.9583 15.3452 13.9583 15C13.9583 14.6548 13.6785 14.375 13.3333 14.375H6.66668Z" />
-                  <path
-                    d="M13.125 2.29167L16.0417 5.20834H14.1667C13.5913 5.20834 13.125 4.74197 13.125 4.16667V2.29167Z" />
-                </svg>
-              </span>
-              <span class="text">Pages</span>
-            </a>
-            <ul id="ddmenu_2" class="collapse dropdown-nav">
-              <li>
-                <a href="settings.html"> Settings </a>
-              </li>
-              <li>
-                <a href="blank-page.html"> Blank Page </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a href="invoice.html">
-              <span class="icon">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M3.33334 3.35442C3.33334 2.4223 4.07954 1.66666 5.00001 1.66666H15C15.9205 1.66666 16.6667 2.4223 16.6667 3.35442V16.8565C16.6667 17.5519 15.8827 17.9489 15.3333 17.5317L13.8333 16.3924C13.537 16.1673 13.1297 16.1673 12.8333 16.3924L10.5 18.1646C10.2037 18.3896 9.79634 18.3896 9.50001 18.1646L7.16668 16.3924C6.87038 16.1673 6.46298 16.1673 6.16668 16.3924L4.66668 17.5317C4.11731 17.9489 3.33334 17.5519 3.33334 16.8565V3.35442ZM4.79168 5.04218C4.79168 5.39173 5.0715 5.6751 5.41668 5.6751H10C10.3452 5.6751 10.625 5.39173 10.625 5.04218C10.625 4.69264 10.3452 4.40927 10 4.40927H5.41668C5.0715 4.40927 4.79168 4.69264 4.79168 5.04218ZM5.41668 7.7848C5.0715 7.7848 4.79168 8.06817 4.79168 8.41774C4.79168 8.76724 5.0715 9.05066 5.41668 9.05066H10C10.3452 9.05066 10.625 8.76724 10.625 8.41774C10.625 8.06817 10.3452 7.7848 10 7.7848H5.41668ZM4.79168 11.7932C4.79168 12.1428 5.0715 12.4262 5.41668 12.4262H10C10.3452 12.4262 10.625 12.1428 10.625 11.7932C10.625 11.4437 10.3452 11.1603 10 11.1603H5.41668C5.0715 11.1603 4.79168 11.4437 4.79168 11.7932ZM13.3333 4.40927C12.9882 4.40927 12.7083 4.69264 12.7083 5.04218C12.7083 5.39173 12.9882 5.6751 13.3333 5.6751H14.5833C14.9285 5.6751 15.2083 5.39173 15.2083 5.04218C15.2083 4.69264 14.9285 4.40927 14.5833 4.40927H13.3333ZM12.7083 8.41774C12.7083 8.76724 12.9882 9.05066 13.3333 9.05066H14.5833C14.9285 9.05066 15.2083 8.76724 15.2083 8.41774C15.2083 8.06817 14.9285 7.7848 14.5833 7.7848H13.3333C12.9882 7.7848 12.7083 8.06817 12.7083 8.41774ZM13.3333 11.1603C12.9882 11.1603 12.7083 11.4437 12.7083 11.7932C12.7083 12.1428 12.9882 12.4262 13.3333 12.4262H14.5833C14.9285 12.4262 15.2083 12.1428 15.2083 11.7932C15.2083 11.4437 14.9285 11.1603 14.5833 11.1603H13.3333Z" />
-                </svg>
-              </span>
-              <span class="text">Invoice</span>
-            </a>
-          </li>
-          <li class="nav-item nav-item-has-children">
-            <a
-              href="#0"
-              class="collapsed"
-              data-bs-toggle="collapse"
-              data-bs-target="#ddmenu_3"
-              aria-controls="ddmenu_3"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <span class="icon">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M14.9211 10.1294C15.1652 9.88534 15.1652 9.48967 14.9211 9.24559L10.7544 5.0789C10.5103 4.83482 10.1147 4.83482 9.87057 5.0789C9.62649 5.32297 9.62649 5.71871 9.87057 5.96278L12.9702 9.06251H1.97916C1.63398 9.06251 1.35416 9.34234 1.35416 9.68751C1.35416 10.0327 1.63398 10.3125 1.97916 10.3125H12.9702L9.87057 13.4123C9.62649 13.6563 9.62649 14.052 9.87057 14.2961C10.1147 14.5402 10.5103 14.5402 10.7544 14.2961L14.9211 10.1294Z" />
-                  <path
-                    d="M11.6383 15.18L15.805 11.0133C16.5373 10.2811 16.5373 9.09391 15.805 8.36166L11.6383 4.195C11.2722 3.82888 10.7923 3.64582 10.3125 3.64582V3.02082C10.3125 2.10035 11.0587 1.35416 11.9792 1.35416H16.9792C17.8997 1.35416 18.6458 2.10035 18.6458 3.02082V16.3542C18.6458 17.2747 17.8997 18.0208 16.9792 18.0208H11.9792C11.0587 18.0208 10.3125 17.2747 10.3125 16.3542V15.7292C10.7923 15.7292 11.2722 15.5461 11.6383 15.18Z" />
-                </svg>
-              </span>
-              <span class="text">Auth</span>
-            </a>
-            <ul id="ddmenu_3" class="collapse dropdown-nav">
-              <li>
-                <a href="signin.html"> Sign In </a>
-              </li>
-              <li>
-                <a href="signup.html"> Sign Up </a>
-              </li>
-            </ul>
-          </li>
-          <span class="divider"><hr /></span>
-          <li class="nav-item nav-item-has-children">
-            <a
-              href="#0"
-              class=""
-              data-bs-toggle="collapse"
-              data-bs-target="#ddmenu_4"
-              aria-controls="ddmenu_4"
-              aria-expanded="true"
-              aria-label="Toggle navigation"
-            >
-              <span class="icon">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M1.66666 5.41669C1.66666 3.34562 3.34559 1.66669 5.41666 1.66669C7.48772 1.66669 9.16666 3.34562 9.16666 5.41669C9.16666 7.48775 7.48772 9.16669 5.41666 9.16669C3.34559 9.16669 1.66666 7.48775 1.66666 5.41669Z" />
-                  <path
-                    d="M1.66666 14.5834C1.66666 12.5123 3.34559 10.8334 5.41666 10.8334C7.48772 10.8334 9.16666 12.5123 9.16666 14.5834C9.16666 16.6545 7.48772 18.3334 5.41666 18.3334C3.34559 18.3334 1.66666 16.6545 1.66666 14.5834Z" />
-                  <path
-                    d="M10.8333 5.41669C10.8333 3.34562 12.5123 1.66669 14.5833 1.66669C16.6544 1.66669 18.3333 3.34562 18.3333 5.41669C18.3333 7.48775 16.6544 9.16669 14.5833 9.16669C12.5123 9.16669 10.8333 7.48775 10.8333 5.41669Z" />
-                  <path
-                    d="M10.8333 14.5834C10.8333 12.5123 12.5123 10.8334 14.5833 10.8334C16.6544 10.8334 18.3333 12.5123 18.3333 14.5834C18.3333 16.6545 16.6544 18.3334 14.5833 18.3334C12.5123 18.3334 10.8333 16.6545 10.8333 14.5834Z" />
-                </svg>
-              </span>
-              <span class="text">UI Elements </span>
-            </a>
-            <ul id="ddmenu_4" class="collapsed show dropdown-nav">
-              <li>
-                <a href="alerts.html"> Alerts </a>
-              </li>
-              <li>
-                <a href="buttons.html"> Buttons </a>
-              </li>
-              <li>
-                <a href="cards.html" class="active"> Cards </a>
-              </li>
-              <li>
-                <a href="typography.html"> Typography </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item nav-item-has-children">
-            <a
-              href="#0"
-              class="collapsed"
-              data-bs-toggle="collapse"
-              data-bs-target="#ddmenu_55"
-              aria-controls="ddmenu_55"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <span class="icon">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M5.48663 1.1466C5.77383 0.955131 6.16188 1.03274 6.35335 1.31994L6.87852 2.10769C7.20508 2.59755 7.20508 3.23571 6.87852 3.72556L6.35335 4.51331C6.16188 4.80052 5.77383 4.87813 5.48663 4.68666C5.19943 4.49519 5.12182 4.10715 5.31328 3.81994L5.83845 3.03219C5.88511 2.96221 5.88511 2.87105 5.83845 2.80106L5.31328 2.01331C5.12182 1.72611 5.19943 1.33806 5.48663 1.1466Z" />
-                  <path
-                    d="M2.49999 5.83331C2.03976 5.83331 1.66666 6.2064 1.66666 6.66665V10.8333C1.66666 13.5948 3.90523 15.8333 6.66666 15.8333H9.99999C12.1856 15.8333 14.0436 14.431 14.7235 12.4772C14.8134 12.4922 14.9058 12.5 15 12.5H16.6667C17.5872 12.5 18.3333 11.7538 18.3333 10.8333V8.33331C18.3333 7.41284 17.5872 6.66665 16.6667 6.66665H15C15 6.2064 14.6269 5.83331 14.1667 5.83331H2.49999ZM14.9829 11.2496C14.9942 11.1123 15 10.9735 15 10.8333V7.91665H16.6667C16.8967 7.91665 17.0833 8.10319 17.0833 8.33331V10.8333C17.0833 11.0634 16.8967 11.25 16.6667 11.25H15L14.9898 11.2498L14.9829 11.2496Z" />
-                  <path
-                    d="M8.85332 1.31994C8.6619 1.03274 8.27383 0.955131 7.98663 1.1466C7.69943 1.33806 7.62182 1.72611 7.81328 2.01331L8.33848 2.80106C8.38507 2.87105 8.38507 2.96221 8.33848 3.03219L7.81328 3.81994C7.62182 4.10715 7.69943 4.49519 7.98663 4.68666C8.27383 4.87813 8.6619 4.80052 8.85332 4.51331L9.37848 3.72556C9.70507 3.23571 9.70507 2.59755 9.37848 2.10769L8.85332 1.31994Z" />
-                  <path
-                    d="M10.4867 1.1466C10.7738 0.955131 11.1619 1.03274 11.3533 1.31994L11.8785 2.10769C12.2051 2.59755 12.2051 3.23571 11.8785 3.72556L11.3533 4.51331C11.1619 4.80052 10.7738 4.87813 10.4867 4.68666C10.1994 4.49519 10.1218 4.10715 10.3133 3.81994L10.8385 3.03219C10.8851 2.96221 10.8851 2.87105 10.8385 2.80106L10.3133 2.01331C10.1218 1.72611 10.1994 1.33806 10.4867 1.1466Z" />
-                  <path
-                    d="M2.49999 16.6667C2.03976 16.6667 1.66666 17.0398 1.66666 17.5C1.66666 17.9602 2.03976 18.3334 2.49999 18.3334H14.1667C14.6269 18.3334 15 17.9602 15 17.5C15 17.0398 14.6269 16.6667 14.1667 16.6667H2.49999Z" />
-                </svg>
-              </span>
-              <span class="text">Icons</span>
-            </a>
-            <ul id="ddmenu_55" class="collapse dropdown-nav">
-              <li>
-                <a href="icons.html"> LineIcons </a>
-              </li>
-              <li>
-                <a href="mdi-icons.html"> MDI Icons </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item nav-item-has-children">
-            <a
-              href="#0"
-              class="collapsed"
-              data-bs-toggle="collapse"
-              data-bs-target="#ddmenu_5"
-              aria-controls="ddmenu_5"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <span class="icon">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M4.16666 3.33335C4.16666 2.41288 4.91285 1.66669 5.83332 1.66669H14.1667C15.0872 1.66669 15.8333 2.41288 15.8333 3.33335V16.6667C15.8333 17.5872 15.0872 18.3334 14.1667 18.3334H5.83332C4.91285 18.3334 4.16666 17.5872 4.16666 16.6667V3.33335ZM6.04166 5.00002C6.04166 5.3452 6.32148 5.62502 6.66666 5.62502H13.3333C13.6785 5.62502 13.9583 5.3452 13.9583 5.00002C13.9583 4.65485 13.6785 4.37502 13.3333 4.37502H6.66666C6.32148 4.37502 6.04166 4.65485 6.04166 5.00002ZM6.66666 6.87502C6.32148 6.87502 6.04166 7.15485 6.04166 7.50002C6.04166 7.8452 6.32148 8.12502 6.66666 8.12502H13.3333C13.6785 8.12502 13.9583 7.8452 13.9583 7.50002C13.9583 7.15485 13.6785 6.87502 13.3333 6.87502H6.66666ZM6.04166 10C6.04166 10.3452 6.32148 10.625 6.66666 10.625H9.99999C10.3452 10.625 10.625 10.3452 10.625 10C10.625 9.65485 10.3452 9.37502 9.99999 9.37502H6.66666C6.32148 9.37502 6.04166 9.65485 6.04166 10ZM9.99999 16.6667C10.9205 16.6667 11.6667 15.9205 11.6667 15C11.6667 14.0795 10.9205 13.3334 9.99999 13.3334C9.07949 13.3334 8.33332 14.0795 8.33332 15C8.33332 15.9205 9.07949 16.6667 9.99999 16.6667Z" />
-                </svg>
-              </span>
-              <span class="text"> Forms </span>
-            </a>
-            <ul id="ddmenu_5" class="collapse dropdown-nav">
-              <li>
-                <a href="form-elements.html"> Form Elements </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a href="tables.html">
-              <span class="icon">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M1.66666 4.16667C1.66666 3.24619 2.41285 2.5 3.33332 2.5H16.6667C17.5872 2.5 18.3333 3.24619 18.3333 4.16667V9.16667C18.3333 10.0872 17.5872 10.8333 16.6667 10.8333H3.33332C2.41285 10.8333 1.66666 10.0872 1.66666 9.16667V4.16667Z" />
-                  <path
-                    d="M1.875 13.75C1.875 13.4048 2.15483 13.125 2.5 13.125H17.5C17.8452 13.125 18.125 13.4048 18.125 13.75C18.125 14.0952 17.8452 14.375 17.5 14.375H2.5C2.15483 14.375 1.875 14.0952 1.875 13.75Z" />
-                  <path
-                    d="M2.5 16.875C2.15483 16.875 1.875 17.1548 1.875 17.5C1.875 17.8452 2.15483 18.125 2.5 18.125H17.5C17.8452 18.125 18.125 17.8452 18.125 17.5C18.125 17.1548 17.8452 16.875 17.5 16.875H2.5Z" />
-                </svg>
-              </span>
-              <span class="text">Tables</span>
-            </a>
-          </li>
-          <span class="divider"><hr /></span>
-
-          <li class="nav-item">
-            <a href="notification.html">
-              <span class="icon">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M10.8333 2.50008C10.8333 2.03984 10.4602 1.66675 9.99999 1.66675C9.53975 1.66675 9.16666 2.03984 9.16666 2.50008C9.16666 2.96032 9.53975 3.33341 9.99999 3.33341C10.4602 3.33341 10.8333 2.96032 10.8333 2.50008Z" />
-                  <path
-                    d="M17.5 5.41673C17.5 7.02756 16.1942 8.33339 14.5833 8.33339C12.9725 8.33339 11.6667 7.02756 11.6667 5.41673C11.6667 3.80589 12.9725 2.50006 14.5833 2.50006C16.1942 2.50006 17.5 3.80589 17.5 5.41673Z" />
-                  <path
-                    d="M11.4272 2.69637C10.9734 2.56848 10.4947 2.50006 10 2.50006C7.10054 2.50006 4.75003 4.85057 4.75003 7.75006V9.20873C4.75003 9.72814 4.62082 10.2393 4.37404 10.6963L3.36705 12.5611C2.89938 13.4272 3.26806 14.5081 4.16749 14.9078C7.88074 16.5581 12.1193 16.5581 15.8326 14.9078C16.732 14.5081 17.1007 13.4272 16.633 12.5611L15.626 10.6963C15.43 10.3333 15.3081 9.93606 15.2663 9.52773C15.0441 9.56431 14.8159 9.58339 14.5833 9.58339C12.2822 9.58339 10.4167 7.71791 10.4167 5.41673C10.4167 4.37705 10.7975 3.42631 11.4272 2.69637Z" />
-                  <path
-                    d="M7.48901 17.1925C8.10004 17.8918 8.99841 18.3335 10 18.3335C11.0016 18.3335 11.9 17.8918 12.511 17.1925C10.8482 17.4634 9.15183 17.4634 7.48901 17.1925Z" />
-                </svg>
-              </span>
-              <span class="text">Notifications</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
-      <div class="promo-box">
-        <div class="promo-icon">
-          <img class="mx-auto" src="./assets/images/logo/logo-icon-big.svg" alt="Logo">
-        </div>
-        <h3>Upgrade to PRO</h3>
-        <p>Improve your development process and start doing more with PlainAdmin PRO!</p>
-        <a href="https://plainadmin.com/pro" target="_blank" rel="nofollow" class="main-btn primary-btn btn-hover">
-          Upgrade to PRO
-        </a>
-      </div>
-    </aside>
-    <div class="overlay"></div>
-    <!-- ======== sidebar-nav end =========== -->
-
-    <!-- ======== main-wrapper start =========== -->
-    <main class="main-wrapper">
-      <!-- ========== header start ========== -->
-      <header class="header">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-lg-5 col-md-5 col-6">
-              <div class="header-left d-flex align-items-center">
-                <div class="menu-toggle-btn mr-15">
-                  <button id="menu-toggle" class="main-btn primary-btn btn-hover">
-                    <i class="lni lni-chevron-left me-2"></i> Menu
-                  </button>
-                </div>
-                <div class="header-search d-none d-md-flex">
-                  <form action="#">
-                    <input type="text" placeholder="Search..." />
-                    <button><i class="lni lni-search-alt"></i></button>
-                  </form>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-7 col-md-7 col-6">
-              <div class="header-right">
-                <!-- notification start -->
-                <div class="notification-box ml-15 d-none d-md-flex">
-                  <button class="dropdown-toggle" type="button" id="notification" data-bs-toggle="dropdown"
-                    aria-expanded="false">
-                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path
-                        d="M11 20.1667C9.88317 20.1667 8.88718 19.63 8.23901 18.7917H13.761C13.113 19.63 12.1169 20.1667 11 20.1667Z"
-                        fill="" />
-                      <path
-                        d="M10.1157 2.74999C10.1157 2.24374 10.5117 1.83333 11 1.83333C11.4883 1.83333 11.8842 2.24374 11.8842 2.74999V2.82604C14.3932 3.26245 16.3051 5.52474 16.3051 8.24999V14.287C16.3051 14.5301 16.3982 14.7633 16.564 14.9352L18.2029 16.6342C18.4814 16.9229 18.2842 17.4167 17.8903 17.4167H4.10961C3.71574 17.4167 3.5185 16.9229 3.797 16.6342L5.43589 14.9352C5.6017 14.7633 5.69485 14.5301 5.69485 14.287V8.24999C5.69485 5.52474 7.60672 3.26245 10.1157 2.82604V2.74999Z"
-                        fill="" />
-                    </svg>
-                    <span></span>
-                  </button>
-                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notification">
-                    <li>
-                      <a href="#0">
-                        <div class="image">
-                          <img src="assets/images/lead/lead-6.png" alt="" />
-                        </div>
-                        <div class="content">
-                          <h6>
-                            John Doe
-                            <span class="text-regular">
-                              comment on a product.
-                            </span>
-                          </h6>
-                          <p>
-                            Lorem ipsum dolor sit amet, consect etur adipiscing
-                            elit Vivamus tortor.
-                          </p>
-                          <span>10 mins ago</span>
-                        </div>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#0">
-                        <div class="image">
-                          <img src="assets/images/lead/lead-1.png" alt="" />
-                        </div>
-                        <div class="content">
-                          <h6>
-                            Jonathon
-                            <span class="text-regular">
-                              like on a product.
-                            </span>
-                          </h6>
-                          <p>
-                            Lorem ipsum dolor sit amet, consect etur adipiscing
-                            elit Vivamus tortor.
-                          </p>
-                          <span>10 mins ago</span>
-                        </div>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-                <!-- notification end -->
-                <!-- message start -->
-                <div class="header-message-box ml-15 d-none d-md-flex">
-                  <button class="dropdown-toggle" type="button" id="message" data-bs-toggle="dropdown"
-                    aria-expanded="false">
-                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path
-                        d="M7.74866 5.97421C7.91444 5.96367 8.08162 5.95833 8.25005 5.95833C12.5532 5.95833 16.0417 9.4468 16.0417 13.75C16.0417 13.9184 16.0364 14.0856 16.0259 14.2514C16.3246 14.138 16.6127 14.003 16.8883 13.8482L19.2306 14.629C19.7858 14.8141 20.3141 14.2858 20.129 13.7306L19.3482 11.3882C19.8694 10.4604 20.1667 9.38996 20.1667 8.25C20.1667 4.70617 17.2939 1.83333 13.75 1.83333C11.0077 1.83333 8.66702 3.55376 7.74866 5.97421Z"
-                        fill="" />
-                      <path
-                        d="M14.6667 13.75C14.6667 17.2938 11.7939 20.1667 8.25004 20.1667C7.11011 20.1667 6.03962 19.8694 5.11182 19.3482L2.76946 20.129C2.21421 20.3141 1.68597 19.7858 1.87105 19.2306L2.65184 16.8882C2.13062 15.9604 1.83338 14.89 1.83338 13.75C1.83338 10.2062 4.70622 7.33333 8.25004 7.33333C11.7939 7.33333 14.6667 10.2062 14.6667 13.75ZM5.95838 13.75C5.95838 13.2437 5.54797 12.8333 5.04171 12.8333C4.53545 12.8333 4.12504 13.2437 4.12504 13.75C4.12504 14.2563 4.53545 14.6667 5.04171 14.6667C5.54797 14.6667 5.95838 14.2563 5.95838 13.75ZM9.16671 13.75C9.16671 13.2437 8.7563 12.8333 8.25004 12.8333C7.74379 12.8333 7.33338 13.2437 7.33338 13.75C7.33338 14.2563 7.74379 14.6667 8.25004 14.6667C8.7563 14.6667 9.16671 14.2563 9.16671 13.75ZM11.4584 14.6667C11.9647 14.6667 12.375 14.2563 12.375 13.75C12.375 13.2437 11.9647 12.8333 11.4584 12.8333C10.9521 12.8333 10.5417 13.2437 10.5417 13.75C10.5417 14.2563 10.9521 14.6667 11.4584 14.6667Z"
-                        fill="" />
-                    </svg>
-                    <span></span>
-                  </button>
-                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="message">
-                    <li>
-                      <a href="#0">
-                        <div class="image">
-                          <img src="assets/images/lead/lead-5.png" alt="" />
-                        </div>
-                        <div class="content">
-                          <h6>Jacob Jones</h6>
-                          <p>Hey!I can across your profile and ...</p>
-                          <span>10 mins ago</span>
-                        </div>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#0">
-                        <div class="image">
-                          <img src="assets/images/lead/lead-3.png" alt="" />
-                        </div>
-                        <div class="content">
-                          <h6>John Doe</h6>
-                          <p>Would you mind please checking out</p>
-                          <span>12 mins ago</span>
-                        </div>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#0">
-                        <div class="image">
-                          <img src="assets/images/lead/lead-2.png" alt="" />
-                        </div>
-                        <div class="content">
-                          <h6>Anee Lee</h6>
-                          <p>Hey! are you available for freelance?</p>
-                          <span>1h ago</span>
-                        </div>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-                <!-- message end -->
-                <!-- profile start -->
-                <div class="profile-box ml-15">
-                  <button class="dropdown-toggle bg-transparent border-0" type="button" id="profile"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-                    <div class="profile-info">
-                      <div class="info">
-                        <div class="image">
-                          <img src="assets/images/profile/profile-image.png" alt="" />
-                        </div>
-                        <div>
-                          <h6 class="fw-500">Adam Joe</h6>
-                          <p>Admin</p>
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profile">
-                    <li>
-                      <div class="author-info flex items-center !p-1">
-                        <div class="image">
-                          <img src="assets/images/profile/profile-image.png" alt="image">
-                        </div>
-                        <div class="content">
-                          <h4 class="text-sm">Adam Joe</h4>
-                          <a class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white text-xs"
-                            href="#">Email@gmail.com</a>
-                        </div>
-                      </div>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                      <a href="#0">
-                        <i class="lni lni-user"></i> View Profile
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#0">
-                        <i class="lni lni-alarm"></i> Notifications
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#0"> <i class="lni lni-inbox"></i> Messages </a>
-                    </li>
-                    <li>
-                      <a href="#0"> <i class="lni lni-cog"></i> Settings </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                      <a href="#0"> <i class="lni lni-exit"></i> Sign Out </a>
-                    </li>
-                  </ul>
-                </div>
-                <!-- profile end -->
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-
-                        'primary': '#059669',
-                        'secondary': '#10b981',
-                        'bg-light': '#f7f9fc',
-                        'card-bg': '#ffffff',
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        .card-style-5 {
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-        }
-        .card-style-5:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-        }
-        .main-btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            transition: background-color 0.2s, box-shadow 0.2s;
-        }
-        .primary-btn {
-            background-color: transparent;
-            border: 2px solid #2F1B12;
-            color: #2F1B12;
-        }
-        .primary-btn:hover {
-            border: none;
-            background-color: #8B4513;
-            color: white;
-        }
-        p{
-          color: #8B4513;
-        }
-        .success-btn {
-            background-color: #059669;
-            color: white;
-        }
-        .success-btn:hover {
-            background-color: #047857;
-        }
-        .card-image img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            border-radius: 0.5rem 0.5rem 0 0;
-        }
-    </style>
+  .loader {
+    @apply inline-block w-8 h-8 border-4 border-t-accent border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin;
+  }
+</style>
 </head>
-<body class="bg-bg-light font-sans antialiased">
+<body class="bg-gradient-to-br from-amber-50 to-orange-50 font-sans antialiased">
 
-   <div id="addAnimalModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-  <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
-    <div class="fixed inset-0 bg-gray-900 bg-opacity-60 backdrop-blur-sm transition-opacity" onclick="toggleModal()"></div>
+  <aside class="fixed inset-y-0 left-0 w-64 bg-white shadow-xl z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+    <div class="p-6 border-b border-gray-100">
+      <a href="/dashboard" class="flex items-center space-x-3">
+         <a href="#" class="flex items-center">
+           <img src="/app/assets/Logo_P1.png" onerror="this.onerror=null;this.src='https://www.google.com/search?q=https://placehold.co/100x60/8B4513/FFFFFF%3Ftext%3DRanchSmart'" alt="RanchSmart" class="h-14 md:h-18 lg:h-20 w-auto max-h-full object-contain ">
+      </a>
+      </a>
+    </div>
+    <nav class="mt-6 px-4">
+      <ul class="space-y-1">
+        <li>
+          <a href="/dashboard" class="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-primary/10 rounded-xl transition-all duration-200">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            <span class="font-medium">Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="/dashboard/animals" class="flex items-center space-x-3 px-4 py-3 bg-gradient-to-r from-primary/10 to-accent/10 text-primary rounded-xl font-semibold shadow-sm">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+            <span>Animaux</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </aside>
 
-    <div class="inline-block w-full max-w-2xl p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-2xl rounded-2xl">
+  <main class="lg:ml-64 p-6 min-h-screen">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 animate-slide-up">
+      <div>
+        <h1 class="text-4xl font-bold text-gray-800 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+          Animaux du Ranch
+        </h1>
+        <p class="text-muted mt-1 flex items-center gap-2">
+          <span id="animalCount">0</span> animaux enregistrés
+          <span class="w-2 h-2 bg-accent rounded-full animate-pulse"></span>
+        </p>
+      </div>
+      <button onclick="toggleModal()" class="group bg-gradient-to-r from-primary to-accent text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center gap-3">
+        <svg class="w-5 h-5 group-hover:animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        Nouvel Animal
+      </button>
+    </div>
 
-      <div class="flex items-center justify-between mb-6">
-        <div class="flex items-center space-x-3">
-          <div class="relative">
-            <div class="w-12 h-12 rounded-full bg-primary/15 flex items-center justify-center animate-pulse">
-              <svg class="w-7 h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
-            </div>
-            <div class="absolute -top-1 -right-1 w-4 h-4 bg-secondary rounded-full animate-ping"></div>
-            <div class="absolute -top-1 -right-1 w-4 h-4 bg-secondary rounded-full"></div>
-          </div>
-          <div>
-            <h3 class="text-2xl font-bold text-gray-900">Nouvel Animal</h3>
-            <p class="text-sm text-[#8B4513]">Ajoutez un nouvel animal à votre Ranch</p>
-          </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div class="bg-white/80 backdrop-blur-sm p-4 rounded-xl shadow-sm border border-accent/20">
+        <p class="text-xs text-muted">En bonne santé</p>
+        <p id="healthyCount" class="text-2xl font-bold text-success">0</p>
+      </div>
+      <div class="bg-white/80 backdrop-blur-sm p-4 rounded-xl shadow-sm border border-accent/20">
+        <p class="text-xs text-muted">À vacciner</p>
+        <p id="vaccineDue" class="text-2xl font-bold text-warning">0</p>
+      </div>
+      <div class="bg-white/80 backdrop-blur-sm p-4 rounded-xl shadow-sm border border-accent/20">
+        <p class="text-xs text-muted">Enclos pleins</p>
+        <p id="fullEnclosures" class="text-2xl font-bold text-primary">0</p>
+      </div>
+      <div class="bg-white/80 backdrop-blur-sm p-4 rounded-xl shadow-sm border border-accent/20">
+        <p class="text-xs text-muted">Poids moyen</p>
+        <p id="avgWeight" class="text-2xl font-bold text-accent">0 kg</p>
+      </div>
+    </div>
+
+    <div id="animalCardsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 auto-rows-fr">
+      <div id="emptyState" class="col-span-full text-center py-20 animate-fade-in">
+        <div class="mx-auto w-32 h-32 bg-accent/10 rounded-full flex items-center justify-center mb-4">
+          <svg class="w-16 h-16 text-accent/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
         </div>
-        <button onclick="toggleModal()" class="text-gray-400 hover:text-gray-600 transition">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-          </svg>
+        <p class="text-lg text-muted font-medium">Aucun animal pour le moment</p>
+        <p class="text-sm text-muted/70">Commencez par en ajouter un !</p>
+      </div>
+    </div>
+  </main>
+
+  <div id="addAnimalModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 animate-fade-in">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-screen overflow-y-auto animate-slide-up">
+      <div class="sticky top-0 bg-white border-b border-gray-100 p-6 flex items-center justify-between">
+        <h3 id="modalTitle" class="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Nouvel Animal</h3>
+        <button onclick="toggleModal()" class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
 
-      <form id="addAnimalForm" onsubmit="event.preventDefault(); handleSubmit()" class="space-y-5">
-
+      <form id="addAnimalForm" onsubmit="event.preventDefault(); handleSubmit()" class="p-6 space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div class="relative">
-            <input type="text" name="name" id="name" required
-                   class="peer w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition placeholder-transparent"
-                   placeholder="Nom">
-            <label for="name" class="absolute left-4 -top-2.5 px-1 text-sm font-medium text-[#8B4513] bg-white transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-3.5 peer-focus:-top-2.5 peer-focus:text-sm">
-              Nom de l'animal *
-            </label>
+            <input type="text" name="name" required placeholder=" " class="peer w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none transition">
+            <label class="absolute left-4 -top-3 bg-white px-2 text-sm text-muted peer-focus:text-primary transition">Nom</label>
           </div>
-
           <div class="relative">
-            <input type="text" name="species" id="species" required
-                   class="peer w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition placeholder-transparent"
-                   placeholder="Espèce">
-            <label for="species" class="absolute left-4 -top-2.5 px-1 text-sm font-medium text-[#8B4513] bg-white transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-3.5 peer-focus:-top-2.5 peer-focus:text-sm">
-              Espèce *
-            </label>
+            <input type="text" name="species" required placeholder=" " class="peer w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none transition">
+            <label class="absolute left-4 -top-3 bg-white px-2 text-sm text-muted peer-focus:text-primary transition">Espèce</label>
           </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <div class="relative">
-            <input type="number" name="age" id="age" min="0"
-                   class="peer w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition placeholder-transparent"
-                   placeholder="Âge">
-            <label for="age" class="absolute left-4 -top-2.5 px-1 text-sm font-medium text-[#8B4513] bg-white transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-3.5 peer-focus:-top-2.5 peer-focus:text-sm">
-              Âge (années)
-            </label>
-          </div>
-
-          <div class="relative">
-            <input type="number" name="weight" id="weight" step="0.1" min="0"
-                   class="peer w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition placeholder-transparent"
-                   placeholder="Poids">
-            <label for="weight" class="absolute left-4 -top-2.5 px-1 text-sm font-medium text-[#8B4513] bg-white transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-3.5 peer-focus:-top-2.5 peer-focus:text-sm">
-              Poids (kg)
-            </label>
-          </div>
+          <input type="number" name="age" min="0" placeholder="Âge (ans)" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none">
+          <input type="number" name="weight" step="0.1" min="0" placeholder="Poids (kg)" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none">
         </div>
 
         <div class="relative">
-          <input type="text" name="health_status" id="health_status" value="Bonne santé"
-                 class="peer w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition placeholder-transparent">
-          <label for="health_status" class="absolute left-4 -top-2.5 px-1 text-sm font-medium text-[#8B4513] bg-white transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-3.5 peer-focus:-top-2.5 peer-focus:text-sm">
-            État de santé
-          </label>
+          <input type="text" name="health_status" value="Bonne santé" placeholder=" " class="peer w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none">
+          <label class="absolute left-4 -top-3 bg-white px-2 text-sm text-muted peer-focus:text-primary transition">État de santé</label>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <div class="relative">
-            <input type="date" name="last_vaccination" id="last_vaccination"
-                   class="peer w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition">
-            <label for="last_vaccination" class="absolute left-4 -top-2.5 px-1 text-sm font-medium text-[#8B4513] bg-white transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-3.5 peer-focus:-top-2.5 peer-focus:text-sm">
-              Dernière vaccination
-            </label>
-          </div>
+          <input type="date" name="last_vaccination" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none">
+          <input type="number" name="enclosure_id" min="1" placeholder="Enclos ID" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none">
+        </div>
 
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-3">Photo de l’animal</label>
           <div class="relative">
-            <input type="number" name="enclosure_id" id="enclosure_id" min="1"
-                   class="peer w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition placeholder-transparent"
-                   placeholder="ID Enclos">
-            <label for="enclosure_id" class="absolute left-4 -top-2.5 px-1 text-sm font-medium text-[#8B4513] bg-white transition-all peer-placeholder-shown:text-base peer-placeholder-shown:top-3.5 peer-focus:-top-2.5 peer-focus:text-sm">
-              ID de l'enclos
+            <img id="photoPreview" src="" alt="Aperçu" class="w-full h-48 object-cover rounded-2xl mb-3 hidden shadow-md">
+            <label class="flex flex-col items-center justify-center w-full h-40 border-3 border-dashed border-accent/40 rounded-2xl cursor-pointer bg-gradient-to-br from-accent/5 to-primary/5 hover:from-accent/10 hover:to-primary/10 transition-all duration-300">
+              <svg class="w-10 h-10 text-accent mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              <span id="uploadText" class="text-accent font-medium">Choisir une photo</span>
+              <input id="file" name="file" type="file" accept="image/*" class="hidden">
             </label>
           </div>
         </div>
 
-        <div class="mt-6">
-          <label class="block text-sm font-medium text-[#8B4513] mb-2">Photo de profil</label>
-          <div class="flex items-center justify-center w-full">
-            <label for="file" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-primary/30 rounded-xl cursor-pointer bg-primary/5 hover:bg-primary/10 transition">
-              <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                <svg class="w-10 h-10 text-primary mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
-                </svg>
-                <p class="text-xs text-gray-600">Cliquez pour uploader</p>
-              </div>
-              <input id="file" name="file" type="file" accept="image/*" class="hidden">
-            </label>
+        <div id="messageBox" class="p-4 text-sm rounded-xl hidden animate-fade-in"></div>
 
-        <div id="messageBox" class="p-3 text-sm rounded-lg hidden transition-all"></div>
-
-        <div class="flex flex-col sm:flex-row-reverse gap-3 mt-8">
-          <button type="submit" class="main-btn success-btn w-full sm:w-auto flex items-center justify-center gap-2 group">
-            <svg class="w-5 h-5 group-hover:animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-            </svg>
-            Enregistrer l'animal
+        <div class="flex gap-4 pt-4 border-t border-gray-100">
+          <button type="submit" class="flex-1 bg-gradient-to-r from-primary to-accent text-white font-bold py-3.5 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+            Enregistrer
           </button>
-          <button type="button" onclick="toggleModal()" class="px-6 py-3 text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition font-medium">
+          <button type="button" onclick="toggleModal()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3.5 rounded-xl transition">
             Annuler
           </button>
         </div>
       </form>
     </div>
   </div>
-</div>
-    <section class="card-components py-8">
-      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="row flex flex-wrap -mx-4">
-          <div class="w-full px-4">
-            <div class="flex justify-between items-center mt-8 mb-8">
-              <div class="title">
-                <h2 class="text-3xl font-bold text-gray-800">Animaux Enregistrés</h2>
-                <p id="loadingIndicator" class="text-sm text-gray-500 hidden">Chargement des données...</p>
+
+  <div id="deleteModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 animate-fade-in">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 text-center animate-slide-up">
+      <div class="w-20 h-20 mx-auto mb-6 bg-danger/10 rounded-full flex items-center justify-center">
+        <svg class="w-12 h-12 text-danger animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+      </div>
+      <h3 class="text-2xl font-bold text-gray-800 mb-3">Confirmer la suppression</h3>
+      <p class="text-muted mb-8">Cette action est <span class="text-danger font-bold">irréversible</span>. Êtes-vous sûr ?</p>
+      <div class="flex gap-4">
+        <button id="confirmDelete" class="flex-1 bg-danger hover:bg-red-600 text-white font-bold py-3 rounded-xl transition transform hover:scale-105">
+          Supprimer
+        </button>
+        <button onclick="closeDeleteModal()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3 rounded-xl transition">
+          Annuler
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE_URL = 'http://127.0.0.1:8000';
+    let editingAnimalId = null;
+    let animalToDelete = null;
+
+    function showMessage(msg, type = 'success') {
+      const box = document.getElementById('messageBox');
+      box.innerHTML = `
+        <div class="flex items-center gap-2">
+          ${type === 'error' ? '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>' : '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>'}
+          <span>${msg}</span>
+        </div>`;
+      box.className = `p-4 text-sm rounded-xl flex items-center gap-2 animate-fade-in ${type === 'error' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`;
+      box.classList.remove('hidden');
+      setTimeout(() => box.classList.add('hidden'), 4000);
+    }
+
+    function toggleModal() {
+      const modal = document.getElementById('addAnimalModal');
+      modal.classList.toggle('hidden');
+      if (modal.classList.contains('hidden')) {
+        document.getElementById('addAnimalForm').reset();
+        document.getElementById('photoPreview').classList.add('hidden');
+        document.getElementById('uploadText').textContent = 'Choisir une photo';
+        editingAnimalId = null;
+        document.getElementById('modalTitle').textContent = 'Nouvel Animal';
+      }
+    }
+
+    function openEditModal(animal) {
+      editingAnimalId = animal.id;
+      const f = document.getElementById('addAnimalForm');
+      f.name.value = animal.name;
+      f.species.value = animal.species;
+      f.age.value = animal.age || '';
+      f.weight.value = animal.weight || '';
+      f.health_status.value = animal.health_status;
+      f.last_vaccination.value = animal.last_vaccination ? animal.last_vaccination.split('T')[0] : '';
+      f.enclosure_id.value = animal.enclosure_id || '';
+
+      const preview = document.getElementById('photoPreview');
+      if (animal.profile_image) {
+        preview.src = `${API_BASE_URL}${animal.profile_image}`;
+        preview.classList.remove('hidden');
+        document.getElementById('uploadText').textContent = 'Changer la photo';
+      }
+      document.getElementById('addAnimalModal').classList.remove('hidden');
+      document.getElementById('modalTitle').textContent = 'Modifier l’animal';
+    }
+
+    document.getElementById('file').addEventListener('change', e => {
+      const file = e.target.files[0];
+      const preview = document.getElementById('photoPreview');
+      const text = document.getElementById('uploadText');
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = e => { 
+          preview.src = e.target.result; 
+          preview.classList.remove('hidden'); 
+          text.textContent = file.name.length > 20 ? file.name.substring(0, 20) + '...' : file.name;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        preview.classList.add('hidden');
+        text.textContent = editingAnimalId ? 'Changer la photo' : 'Choisir une photo';
+      }
+    });
+
+    function createAnimalCard(animal) {
+      const img = animal.profile_image ? `${API_BASE_URL}${animal.profile_image}` : `https://placehold.co/600x400/9ca3af/ffffff?text=${encodeURIComponent(animal.name[0])}`;
+      const healthColor = animal.health_status.includes('Bonne') ? 'bg-success/10 text-success' : 'bg-warning/10 text-warning';
+      const vaccineStatus = animal.last_vaccination ? 'Vacciné' : 'À vacciner';
+      const vaccineColor = animal.last_vaccination ? 'text-success' : 'text-warning';
+
+      return `
+        <div class="bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 animate-slide-up group">
+          <div class="relative h-56 overflow-hidden">
+            <img src="${img}" alt="${animal.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400?text=404';">
+            <div class="absolute top-4 right-4 ${healthColor} px-3 py-1 rounded-full text-xs font-bold backdrop-blur-sm">
+              ${animal.health_status}
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="font-bold text-xl text-gray-800 truncate">${animal.name}</h3>
+            <p class="text-sm text-muted mt-1">${animal.species}</p>
+            
+            <div class="grid grid-cols-2 gap-3 mt-4 text-sm">
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span>${animal.age ?? '-'} ans</span>
               </div>
-              <button id="addAnimalBtn" type="button" onclick="toggleModal()" class="main-btn success-btn btn-hover">
-                + Ajouter
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6h18M3 12h18M3 18h18"/></svg>
+                <span>${animal.weight ?? '-'} kg</span>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between mt-4 text-xs">
+              <span class="flex items-center gap-1 ${vaccineColor}">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                ${vaccineStatus}
+              </span>
+              <span class="text-muted">Enclos #${animal.enclosure_id ?? '-'}</span>
+            </div>
+
+            <div class="flex gap-3 mt-5">
+              <button onclick='openEditModal(${JSON.stringify(animal)})' class="flex-1 bg-gradient-to-r from-primary/10 to-accent/10 text-primary font-bold text-sm py-2.5 rounded-xl hover:from-primary/20 hover:to-accent/20 transition">
+                Modifier
+              </button>
+              <button onclick="openDeleteModal(${animal.id})" class="flex-1 bg-danger/10 text-danger font-bold text-sm py-2.5 rounded-xl hover:bg-danger/20 transition">
+                Supprimer
               </button>
             </div>
           </div>
-          <div id="animalCardsContainer" class="w-full flex flex-wrap -mx-4">
-              <p class="w-full px-4 text-center text-gray-500" id="emptyState">Aucun animal enregistré. Cliquez sur '+ Ajouter' pour commencer.</p>
+        </div>
+      `;
+    }
+
+    function updateStats(animals) {
+      const healthy = animals.filter(a => a.health_status.includes('Bonne')).length;
+      const vaccineDue = animals.filter(a => !a.last_vaccination).length;
+      const avgWeight = animals.length ? (animals.reduce((s, a) => s + (a.weight || 0), 0) / animals.length).toFixed(1) : 0;
+
+      document.getElementById('animalCount').textContent = animals.length;
+      document.getElementById('healthyCount').textContent = healthy;
+      document.getElementById('vaccineDue').textContent = vaccineDue;
+      document.getElementById('avgWeight').textContent = avgWeight;
+    }
+
+    async function fetchAnimals() {
+      const container = document.getElementById('animalCardsContainer');
+      const empty = document.getElementById('emptyState');
+      showLoader('animalCardsContainer', 'cards');
+      empty.classList.add('hidden');
+      try {
+        const res = await fetch(`${API_BASE_URL}/animals/`);
+        const animals = await res.json();
+        container.innerHTML = animals.length ? animals.map(createAnimalCard).join('') : '';
+        empty.classList.toggle('hidden', animals.length > 0);
+        updateStats(animals);
+      } catch (err) {
+        container.innerHTML = `<p class="col-span-full text-danger text-center py-10">Erreur de chargement</p>`;
+      }
+    }
+
+    async function handleSubmit() {
+      const form = document.getElementById('addAnimalForm');
+      const data = new FormData(form);
+      ['age', 'weight', 'last_vaccination', 'enclosure_id'].forEach(f => !data.get(f) && data.delete(f));
+
+      const url = editingAnimalId ? `${API_BASE_URL}/animals/${editingAnimalId}` : `${API_BASE_URL}/animals/`;
+      const method = editingAnimalId ? 'PUT' : 'POST';
+      showLoader(modal, 'modal');
+      try {
+        const res = await fetch(url, { method, body: data });
+        if (!res.ok) throw new Error((await res.json()).detail || "Erreur");
+        showMessage(editingAnimalId ? "Mis à jour avec succès !" : "Animal ajouté !");
+        toggleModal();
+        fetchAnimals();
+      } catch (err) {
+        showMessage(err.message, 'error');
+      }
+    }
+
+    function openDeleteModal(id) {
+      animalToDelete = id;
+      document.getElementById('deleteModal').classList.remove('hidden');
+    }
+
+    function closeDeleteModal() {
+      document.getElementById('deleteModal').classList.add('hidden');
+      animalToDelete = null;
+    }
+
+    document.getElementById('confirmDelete').onclick = async () => {
+      if (!animalToDelete) return;
+      try {
+        await fetch(`${API_BASE_URL}/animals/${animalToDelete}`, { method: 'DELETE' });
+        showMessage("Animal supprimé", 'success');
+        closeDeleteModal();
+        fetchAnimals();
+      } catch (err) {
+        showMessage("Échec de suppression", 'error');
+      }
+    };
+
+    window.addEventListener('load', fetchAnimals);
+  </script>
+
+  <script>
+  function showLoader(containerId, type = 'cards') {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    let loaderHTML = '';
+
+    if (type === 'cards') {
+      loaderHTML = Array(6).fill().map(() => `
+        <div class="bg-white rounded-3xl shadow-lg p-6 animate-pulse">
+          <div class="skeleton-image mb-4"></div>
+          <div class="space-y-3">
+            <div class="skeleton-text"></div>
+            <div class="skeleton-text-short"></div>
+            <div class="flex gap-2">
+              <div class="skeleton-button flex-1"></div>
+              <div class="skeleton-button flex-1"></div>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      `).join('');
+    }
 
-    <script>
-        const API_BASE_URL = 'http://127.0.0.1:8000'
-        const UPLOAD_DIR_PATH = '/app/static/assets/animals';
+    else if (type === 'stats') {
+      loaderHTML = Array(4).fill().map(() => `
+        <div class="bg-white/80 backdrop-blur-sm p-6 rounded-3xl shadow-lg border border-accent/20">
+          <div class="flex items-center justify-between mb-3">
+            <div class="skeleton-circle"></div>
+            <div class="skeleton-text-short"></div>
+          </div>
+          <div class="h-10 skeleton rounded-lg"></div>
+          <div class="h-4 skeleton mt-2 w-16"></div>
+        </div>
+      `).join('');
+    }
 
-        // --- messages succes/erreur ---
+    else if (type === 'modal') {
+      const form = container.querySelector('form');
+      const loadingDiv = container.querySelector('#modalLoading') || document.createElement('div');
+      loadingDiv.id = 'modalLoading';
+      loadingDiv.innerHTML = `
+        <div class="flex flex-col items-center justify-center py-8 space-y-4">
+          <div class="loader"></div>
+          <p class="text-sm text-muted">Traitement en cours...</p>
+        </div>
+      `;
+      loadingDiv.className = 'space-y-4';
+      form.classList.add('hidden');
+      container.appendChild(loadingDiv);
+      return;
+    }
 
-        function showMessage(message, type = 'success') {
-            const box = document.getElementById('messageBox');
-            box.textContent = message;
-            box.classList.remove('hidden', 'bg-red-100', 'text-red-700', 'bg-green-100', 'text-green-700');
-            box.classList.add(type === 'error' ? 'bg-red-100' : 'bg-green-100', type === 'error' ? 'text-red-700' : 'text-green-700');
-            setTimeout(() => box.classList.add('hidden'), 5000);
-        }
+    container.innerHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">${loaderHTML}</div>`;
+  }
 
-        function toggleModal() {
-            const modal = document.getElementById('addAnimalModal');
-            modal.classList.toggle('hidden');
-            document.getElementById('addAnimalForm').reset();
-            document.getElementById('messageBox').classList.add('hidden');
-        }
-
-        function formatDate(dateString) {
-            if (!dateString) return 'N/A';
-            try {
-                return new Date(dateString).toLocaleDateString('fr-FR', {
-                    year: 'numeric', month: 'long', day: 'numeric'
-                });
-            } catch (e) {
-                return dateString;
-            }
-        }
-
-        // --- logique de rendu ---
-
-        function createAnimalCard(animal) {
-            const imageUrl = animal.profile_image ? `${API_BASE_URL}${animal.profile_image}` : `https://placehold.co/600x400/878787/ffffff?text=${animal.name || 'Animal'}`;
-            const statusColor = animal.health_status.toLowerCase().includes('healthy') || animal.health_status.toLowerCase().includes('bonne') ? 'text-green-600' : 'text-yellow-600';
-
-            const cardHtml = `
-                <div class="w-full md:w-1/2 lg:w-1/3 xl:w-1/2 px-4 mb-8">
-                    <div class="card-style-5 mb-8 bg-card-bg rounded-lg overflow-hidden">
-                        <div class="card-image">
-                            <a href="#animal-${animal.id}">
-                                <img src="${imageUrl}" alt="${animal.name} de l'espèce ${animal.species}"
-                                     onerror="this.onerror=null;this.src='https://placehold.co/600x400/878787/ffffff?text=Image+indisponible';" />
-                            </a>
-                        </div>
-                        <div class="card-content p-6">
-                            <h4 class="text-amber-600 font-semibold mb-2 flex justify-between items-start">
-                               ${animal.name} (${animal.species})
-
-                            </h4>
-                            <p class="text-sm mb-1 text-gray-700">
-                                <strong>Âge:</strong> ${animal.age !== null ? animal.age + ' ans' : 'Inconnu'}
-                            </p>
-                            <p class="text-sm mb-1 text-gray-700">
-                                <strong>Poids:</strong> ${animal.weight !== null ? animal.weight + ' kg' : 'Inconnu'}
-                            </p>
-                            <p class="text-sm mb-4 text-gray-700">
-                                <strong>Enclos ID:</strong> ${animal.enclosure_id !== null ? animal.enclosure_id : 'Non assigné'}
-                            </p>
-                            <p class="text-xs mb-4 ${statusColor}">
-                                <strong>Statut:</strong> ${animal.health_status} |
-                                <strong>Vaccin:</strong> ${formatDate(animal.last_vaccination)}
-                            </p>
-                            <a href="#details-${animal.id}" class="main-btn primary-btn btn-hover text-sm">Modifier</a>
-                        </div>
-                    </div>
-                </div>
-            `;
-            return cardHtml;
-        }
-
-        function renderAnimals(animals) {
-            const container = document.getElementById('animalCardsContainer');
-            const emptyState = document.getElementById('emptyState');
-            container.innerHTML = ''; // Clear existing content
-
-            if (animals.length === 0) {
-                emptyState.classList.remove('hidden');
-                container.appendChild(emptyState);
-                return;
-            }
-
-            emptyState.classList.add('hidden');
-            animals.forEach(animal => {
-                container.insertAdjacentHTML('beforeend', createAnimalCard(animal));
-            });
-        }
-
-        // --- appel des api ---
-
-        async function fetchAnimals() {
-            const indicator = document.getElementById('loadingIndicator');
-            indicator.classList.remove('hidden');
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/animals/`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const animals = await response.json();
-                renderAnimals(animals);
-            } catch (error) {
-                console.error("Erreur lors du chargement des animaux:", error);
-                const container = document.getElementById('animalCardsContainer');
-                container.innerHTML = `<p class="w-full px-4 text-center text-red-600">Erreur de connexion à l'API (${API_BASE_URL}/animals/). Veuillez vérifier que FastAPI est démarré.</p>`;
-            } finally {
-                indicator.classList.add('hidden');
-            }
-        }
-
-        async function handleSubmit() {
-            const form = document.getElementById('addAnimalForm');
-            const messageBox = document.getElementById('messageBox');
-            messageBox.classList.add('hidden');
-
-            const formData = new FormData();
-
-            const name = form.elements['name'].value.trim();
-            const species = form.elements['species'].value.trim();
-
-            if (!name || !species) {
-                showMessage("Le nom et l'espèce sont obligatoires.", 'error');
-                return;
-            }
-
-            formData.append('name', name);
-            formData.append('species', species);
-
-            const age = form.elements['age'].value;
-            if (age) formData.append('age', parseInt(age));
-
-            const weight = form.elements['weight'].value;
-            if (weight) formData.append('weight', parseFloat(weight));
-
-            const healthStatus = form.elements['health_status'].value;
-            formData.append('health_status', healthStatus || "Bonne santé");
-
-            const lastVaccination = form.elements['last_vaccination'].value;
-            if (lastVaccination) formData.append('last_vaccination', lastVaccination);
-
-            const enclosureId = form.elements['enclosure_id'].value;
-            if (enclosureId) formData.append('enclosure_id', parseInt(enclosureId));
-
-            const fileInput = form.elements['file'];
-            if (fileInput.files.length > 0) {
-                formData.append('file', fileInput.files[0]);
-            }
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/animals/`, {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const result = await response.json();
-
-                if (!response.ok) {
-                    const errorDetail = result.detail || "Erreur inconnue lors de l'enregistrement.";
-                    throw new Error(errorDetail);
-                }
-
-                showMessage(`Animal "${result.name}" ajouté avec succès (ID: ${result.id})!`, 'success');
-                toggleModal();
-                fetchAnimals();
-
-            } catch (error) {
-                console.error("Erreur d'enregistrement:", error);
-                showMessage(`Échec de l'enregistrement: ${error.message || error}`, 'error');
-            }
-        }
-
-        window.onload = fetchAnimals;
-    </script>
-      </footer>
-    </main>
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/Chart.min.js"></script>
-    <script src="assets/js/dynamic-pie-chart.js"></script>
-    <script src="assets/js/moment.min.js"></script>
-    <script src="assets/js/fullcalendar.js"></script>
-    <script src="assets/js/jvectormap.min.js"></script>
-    <script src="assets/js/world-merc.js"></script>
-    <script src="assets/js/polyfill.js"></script>
-    <script src="assets/js/main.js"></script>
-  </body>
+  function hideLoader(containerId, type = 'cards') {
+    const loadingDiv = document.getElementById('modalLoading');
+    if (loadingDiv) {
+      loadingDiv.remove();
+      document.querySelector('#addAnimalForm')?.classList.remove('hidden');
+    }
+  }
+</script>
+</body>
 </html>
