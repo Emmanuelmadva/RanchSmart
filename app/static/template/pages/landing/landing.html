@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>RanchSmart - Gestion de Ranch Moderne</title>
 
-  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -63,11 +62,11 @@
 
   <div id="vanta-bg" class="vanta-bg"></div>
 
-  <!-- NAVBAR -->
+  <!-- navbar-->
   <nav class="fixed top-0 w-full bg-white/95 backdrop-blur-md shadow-lg z-50 h-20 md:h-24">
     <div class="container mx-auto px-4 h-full flex justify-between items-center">
       <a href="#" class="flex items-center">
-           <img src="assets/Logo_P1.png" onerror="this.onerror=null;this.src='https://www.google.com/search?q=https://placehold.co/100x60/8B4513/FFFFFF%3Ftext%3DRanchSmart'" alt="RanchSmart" class="h-14 md:h-18 lg:h-20 w-auto max-h-full object-contain ">
+           <img src="/app/assets/Logo_P1.png" onerror="this.onerror=null;this.src='https://www.google.com/search?q=https://placehold.co/100x60/8B4513/FFFFFF%3Ftext%3DRanchSmart'" alt="RanchSmart" class="h-14 md:h-18 lg:h-20 w-auto max-h-full object-contain ">
       </a>
       <div class="flex items-center space-x-6">
         <a href="#features" class="hidden md:block text-gray-700 hover:text-accent font-semibold transition">Fonctionnalités</a>
@@ -78,7 +77,7 @@
     </div>
   </nav>
 
-  <!-- HERO -->
+  <!-- hero -->
   <section class="relative h-screen flex items-center justify-center overflow-hidden">
     <div class="swiper heroSwiper w-full h-full">
       <div class="swiper-wrapper">
@@ -111,7 +110,7 @@
 
   
 
-  <!-- FEATURES -->
+  <!-- features-->
   <section id="features" class="py-24 bg-white">
     <div class="container mx-auto px-4">
       <h2 class="text-5xl md:text-6xl font-rye text-center text-primary mb-20" data-aos="fade-up">Tout en un seul outil</h2>
@@ -491,7 +490,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('ranchsmart_token', token); 
             // alert(`Connexion réussie! Bienvenue sur RanchSmart.`); 
             // closeModal('loginModal');
-            window.location.href = '/dashboardUser/index.html';
+            window.location.href = '/dashboard';
         }));
     }
 });
