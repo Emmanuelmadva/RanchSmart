@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional, List
 
+
 class StaffCreate(BaseModel):
     name: str
     email: str
@@ -8,12 +9,20 @@ class StaffCreate(BaseModel):
     phone: Optional[str] = None
     profile_image: Optional[str] = None
 
-class StaffRead(StaffCreate):
+  
+
+class StaffRead(BaseModel):
     id: int
-    assigned_animals: Optional[List[int]] = []
+    name: str
+    email: str
+    role: str
+    phone: Optional[str] = None
+    profile_image: Optional[str] = None
+    assigned_animals: List[int] = []
 
     class Config:
         orm_mode = True
+        from_attributes = True  # Pydantic v2
 
 class StaffUpdate(BaseModel):
     name: Optional[str] = None

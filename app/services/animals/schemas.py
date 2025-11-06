@@ -30,3 +30,5 @@ class AnimalUpdate(BaseModel):
     last_vaccination: Optional[date] = None
     enclosure_id: Optional[int] = None
     profile_image: Optional[str] = None  # Permet de mettre à jour la photo
+
+
