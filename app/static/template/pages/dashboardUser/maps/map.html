@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carte du Ranch</title>
+
+  <!-- Feuilles de style Leaflet -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-o9N1j7kL1fFz9JTbT0rPmtFJ4p1gI1f8pLb0g8Jf3vY="
+    crossorigin=""
+  />
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-o8+Dxow+dLz+/M2Gkvz0YvyrAiy1i9G+1r9mM3qFj0E="
+    crossorigin=""
+  ></script>
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <script>
+    // Création de la carte
+    const map = L.map('map').setView([3.848, 11.502], 13); // Coordonnées par défaut : Yaoundé
+
+    // Ajout du fond de carte OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap',
+      maxZoom: 19
+    }).addTo(map);
+
+    // Exemple : un marqueur
+    const marker = L.marker([3.848, 11.502]).addTo(map);
+    marker.bindPopup('<b>Ranch principal</b><br>Yaoundé').openPopup();
+  </script>
+</body>
+</html>

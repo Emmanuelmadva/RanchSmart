@@ -3,7 +3,9 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
+from app.services.enclosures.maps import generate_map
 import os
+
 
 from app.services.animals.models import Animal
 from app.services.auth.models import User
@@ -61,6 +63,22 @@ def dashboard_animals():
         return HTMLResponse(content=file_path.read_text(encoding="utf-8"))
     except FileNotFoundError:
         return HTMLResponse(content="<h1>404</h1><p>cards.html non trouvé</p>", status_code=404)
+
+@app.get("/dashboard/enclos", response_class=HTMLResponse)
+def dashboard_enclos():
+    file_path = DASHBOARD_DIR / "enclos.html"
+    try:
+        return HTMLResponse(content=file_path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        return HTMLResponse(content="<h1>404</h1><p>enclos.html non trouvé</p>", status_code=404)
+
+@app.get("/map", response_class=HTMLResponse)
+def get_map():
+    """Génère et renvoie la carte Folium."""
+    map_path = generate_map()  # ta fonction doit retourner le chemin du fichier HTML généré
+    with open(map_path, "r", encoding="utf-8") as f:
+        html_content = f.read()
+    return HTMLResponse(content=html_content)
 
 app.include_router(auth_router, prefix="/auth", tags=["Auth"])
 app.include_router(animal_router, prefix="/animals", tags=["Animaux"])
