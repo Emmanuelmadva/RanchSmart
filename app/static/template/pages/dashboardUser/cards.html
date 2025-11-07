@@ -26,11 +26,13 @@
             'fade-in': 'fadeIn 0.3s ease-out',
             'slide-up': 'slideUp 0.4s ease-out',
             'pulse-soft': 'pulseSoft 2s infinite',
+            'collapse': 'collapse 0.3s ease-out',
           },
           keyframes: {
             fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
             slideUp: { '0%': { transform: 'translateY(20px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
             pulseSoft: { '0%, 100%': { opacity: '1' }, '50%': { opacity: '0.8' } },
+            collapse: { '0%': { height: 'auto', opacity: '1' }, '100%': { height: '0', opacity: '0', overflow: 'hidden' } }
           }
         }
       }
@@ -40,32 +42,52 @@
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: #f3f4f6; }
     ::-webkit-scrollbar-thumb { background: #DAA520; border-radius: 3px; }
-  </style>
-  <style>
-  .skeleton {
-    @apply bg-gray-200 rounded-lg animate-pulse;
-  }
-  .skeleton-text { @apply h-4 w-full skeleton; }
-  .skeleton-text-short { @apply h-4 w-3/4 skeleton; }
-  .skeleton-circle { @apply w-12 h-12 rounded-full skeleton; }
-  .skeleton-image { @apply w-full h-48 rounded-xl skeleton; }
-  .skeleton-button { @apply h-10 w-full rounded-lg skeleton; }
 
-  .loader {
-    @apply inline-block w-8 h-8 border-4 border-t-accent border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin;
-  }
-</style>
+    .skeleton {
+      @apply bg-gray-200 rounded-lg animate-pulse;
+    }
+    .skeleton-text { @apply h-4 w-full skeleton; }
+    .skeleton-text-short { @apply h-4 w-3/4 skeleton; }
+    .skeleton-circle { @apply w-12 h-12 rounded-full skeleton; }
+    .skeleton-image { @apply w-full h-48 rounded-xl skeleton; }
+    .skeleton-button { @apply h-10 w-full rounded-lg skeleton; }
+
+    .loader {
+      @apply inline-block w-8 h-8 border-4 border-t-accent border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin;
+    }
+
+    .table-container {
+      max-height: 500px;
+      overflow-y: auto;
+      transition: all 0.3s ease;
+    }
+
+    .collapsible-content {
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+
+    .collapsible-content.closed {
+      height: 0 !important;
+      opacity: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  </style>
 </head>
 <body class="bg-gradient-to-br from-amber-50 to-orange-50 font-sans antialiased">
 
-  <aside class="fixed inset-y-0 left-0 w-64 bg-white shadow-xl z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+  <!-- SIDEBAR -->
+  <aside class="fixed inset-y-0 left-0 w-64 bg-white shadow-xl z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
     <div class="p-6 border-b border-gray-100">
-      <a href="/dashboard" class="flex items-center space-x-3">
-         <a href="#" class="flex items-center">
-           <img src="/app/assets/Logo_P1.png" onerror="this.onerror=null;this.src='https://www.google.com/search?q=https://placehold.co/100x60/8B4513/FFFFFF%3Ftext%3DRanchSmart'" alt="RanchSmart" class="h-14 md:h-18 lg:h-20 w-auto max-h-full object-contain ">
-      </a>
+      <a href="/dashboard" class="flex items-center">
+        <img src="/static/assets/Logo_P1.png" alt="RanchSmart" class="h-18 md:h-24 lg:h-30 w-auto max-h-full object-contain">
       </a>
     </div>
+
+    <!-- NAV PRINCIPALE -->
     <nav class="mt-6 px-4">
       <ul class="space-y-1">
         <li>
@@ -80,6 +102,12 @@
             <span>Animaux</span>
           </a>
         </li>
+          <li>
+          <a href="/dashboard/staff" class="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-primary/10 rounded-xl transition-all duration-200">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H9a2 2 0 01-2-2v-1a6 6 0 0112 0v1a2 2 0 01-2 2z"/></svg>
+            <span>Staff</span>
+          </a>
+        </li>
            <li>
             <a href="/dashboard/enclos" class="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-primary/10 rounded-xl transition-all duration-200">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -90,8 +118,47 @@
           </li>
       </ul>
     </nav>
+
+    <!-- FILTRES COLLAPSIBLES (RÉDUCTION DE L'ÉCART) -->
+    <div class="mt-3 px-4 pb-6 border-t border-gray-100"> <!-- mt-6 → mt-3 -->
+      <button onclick="toggleFilters()" class="w-full flex items-center justify-between text-sm font-bold text-primary uppercase tracking-wider mb-2 hover:text-accent transition"> <!-- mb-3 → mb-2 -->
+        <span>Filtrer par</span>
+        <svg id="filterToggleIcon" class="w-4 h-4 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </button>
+
+      <div id="filterContent" class="collapsible-content">
+        <!-- FILTRE ESPÈCE -->
+        <div class="mb-3"> <!-- mb-4 → mb-3 -->
+          <label class="block text-xs font-medium text-muted mb-1">Espèce</label>
+          <select id="filterSpecies" class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-primary focus:outline-none">
+            <option value="">Toutes les espèces</option>
+          </select>
+        </div>
+
+        <!-- FILTRE SANTÉ -->
+        <div class="mb-3"> <!-- mb-4 → mb-3 -->
+          <label class="block text-xs font-medium text-muted mb-1">État de santé</label>
+          <div id="healthFilters" class="space-y-1 text-xs">
+            <!-- Rempli dynamiquement -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOUTON DÉCONNEXION -->
+    <div class="mt-auto px-4 pb-6 border-t border-gray-100">
+      <button onclick="logout()" class="w-full flex items-center justify-center gap-3 px-4 py-3 bg-gradient-to-r from-danger/10 to-danger/5 text-danger font-semibold rounded-xl hover:from-danger/20 hover:to-danger/10 transition-all duration-300 group">
+        <svg class="w-5 h-5 group-hover:animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+        </svg>
+        <span>Déconnexion</span>
+      </button>
+    </div>
   </aside>
 
+  <!-- MAIN -->
   <main class="lg:ml-64 p-6 min-h-screen">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 animate-slide-up">
       <div>
@@ -109,14 +176,15 @@
       </button>
     </div>
 
+    <!-- STATS -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
       <div class="bg-white/80 backdrop-blur-sm p-4 rounded-xl shadow-sm border border-accent/20">
         <p class="text-xs text-muted">En bonne santé</p>
         <p id="healthyCount" class="text-2xl font-bold text-success">0</p>
       </div>
       <div class="bg-white/80 backdrop-blur-sm p-4 rounded-xl shadow-sm border border-accent/20">
-        <p class="text-xs text-muted">À vacciner</p>
-        <p id="vaccineDue" class="text-2xl font-bold text-warning">0</p>
+        <p class="text-xs text-muted">À surveiller de près</p>
+        <p id="criticalCount" class="text-2xl font-bold text-danger">0</p>
       </div>
       <div class="bg-white/80 backdrop-blur-sm p-4 rounded-xl shadow-sm border border-accent/20">
         <p class="text-xs text-muted">Enclos pleins</p>
@@ -128,6 +196,40 @@
       </div>
     </div>
 
+    <!-- TABLEAU COLLAPSIBLE -->
+    <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-bold text-primary">Liste des animaux</h2>
+        <button onclick="toggleTable()" class="flex items-center gap-2 text-sm font-medium text-primary hover:text-accent transition">
+          <svg id="tableToggleIcon" class="w-4 h-4 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+          <span id="tableToggleText">Masquer le tableau</span>
+        </button>
+      </div>
+
+      <div id="tableContent" class="collapsible-content">
+        <div class="table-container border border-gray-200 rounded-lg">
+          <table class="w-full text-sm">
+            <thead class="bg-primary/5 sticky top-0">
+              <tr>
+                <th class="text-left px-4 py-3 font-medium text-primary">Nom</th>
+                <th class="text-left px-4 py-3 font-medium text-primary">Espèce</th>
+                <th class="text-left px-4 py-3 font-medium text-primary">Santé</th>
+                <th class="text-left px-4 py-3 font-medium text-primary">Âge</th>
+                <th class="text-left px-4 py-3 font-medium text-primary">Poids</th>
+                <th class="text-left px-4 py-3 font-medium text-primary">Enclos</th>
+              </tr>
+            </thead>
+            <tbody id="filterTableBody">
+              <tr><td colspan="6" class="text-center py-10 text-muted">Chargement...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARTES -->
     <div id="animalCardsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 auto-rows-fr">
       <div id="emptyState" class="col-span-full text-center py-20 animate-fade-in">
         <div class="mx-auto w-32 h-32 bg-accent/10 rounded-full flex items-center justify-center mb-4">
@@ -139,6 +241,16 @@
     </div>
   </main>
 
+  <!-- LOADER DE DÉCONNEXION -->
+  <div id="logoutLoader" class="fixed inset-0 bg-white/90 backdrop-blur-md z-50 hidden flex items-center justify-center">
+    <div class="text-center">
+      <div class="loader mx-auto mb-6"></div>
+      <p class="text-lg font-semibold text-primary">Déconnexion en cours...</p>
+      <p class="text-sm text-muted mt-1">Redirection vers la page d’accueil</p>
+    </div>
+  </div>
+
+  <!-- MODAL AJOUT/MODIF -->
   <div id="addAnimalModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 animate-fade-in">
     <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-screen overflow-y-auto animate-slide-up">
       <div class="sticky top-0 bg-white border-b border-gray-100 p-6 flex items-center justify-between">
@@ -166,8 +278,23 @@
         </div>
 
         <div class="relative">
-          <input type="text" name="health_status" value="Bonne santé" placeholder=" " class="peer w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none">
-          <label class="absolute left-4 -top-3 bg-white px-2 text-sm text-muted peer-focus:text-primary transition">État de santé</label>
+          <select name="health_status" required class="peer w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none transition appearance-none bg-white">
+            <option value="" disabled selected>Sélectionnez l'état de santé</option>
+            <option value="Santé Optimale">Santé Optimale (Bien-être Élevé)</option>
+            <option value="Sub-optimal">Sub-optimal (Stress/Condition Légère)</option>
+            <option value="Convalescence">Convalescence/Rétablissement</option>
+            <option value="Maladie Aiguë">Maladie Aiguë</option>
+            <option value="Maladie Chronique">Maladie Chronique</option>
+            <option value="Porteur Sain">Porteur Sain (Asymptomatique)</option>
+            <option value="Infirmier/Blessé">Infirmier/Blessé</option>
+            <option value="État de Carence">État de Carence (Nutritionnel)</option>
+            <option value="État Métabolique Critique">État Métabolique Critique</option>
+            <option value="État de Gestation">État de Gestation/Reproduction</option>
+          </select>
+          <label class="absolute left-4 -top-3 bg-white px-2 text-sm text-muted peer-focus:text-primary transition pointer-events-none">État de santé</label>
+          <svg class="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -201,6 +328,7 @@
     </div>
   </div>
 
+  <!-- MODAL SUPPRESSION -->
   <div id="deleteModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 animate-fade-in">
     <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 text-center animate-slide-up">
       <div class="w-20 h-20 mx-auto mb-6 bg-danger/10 rounded-full flex items-center justify-center">
@@ -219,10 +347,41 @@
     </div>
   </div>
 
+  <!-- SCRIPTS -->
   <script>
     const API_BASE_URL = 'http://127.0.0.1:8000';
     let editingAnimalId = null;
     let animalToDelete = null;
+    let allAnimals = [];
+
+    // === DÉCONNEXION AVEC LOADER ===
+    function logout() {
+      const loader = document.getElementById('logoutLoader');
+      loader.classList.remove('hidden');
+
+      setTimeout(() => {
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.href = '/';
+      }, 2000);
+    }
+
+    // === COLLAPSIBLES ===
+    function toggleFilters() {
+      const content = document.getElementById('filterContent');
+      const icon = document.getElementById('filterToggleIcon');
+      content.classList.toggle('closed');
+      icon.classList.toggle('rotate-180');
+    }
+
+    function toggleTable() {
+      const content = document.getElementById('tableContent');
+      const icon = document.getElementById('tableToggleIcon');
+      const text = document.getElementById('tableToggleText');
+      content.classList.toggle('closed');
+      icon.classList.toggle('rotate-180');
+      text.textContent = content.classList.contains('closed') ? 'Afficher le tableau' : 'Masquer le tableau';
+    }
 
     function showMessage(msg, type = 'success') {
       const box = document.getElementById('messageBox');
@@ -287,17 +446,76 @@
       }
     });
 
+    const healthColors = {
+      "Santé Optimale": "bg-emerald-100 text-emerald-800 border-emerald-200",
+      "Sub-optimal": "bg-yellow-100 text-yellow-800 border-yellow-200",
+      "Convalescence": "bg-blue-100 text-blue-800 border-blue-200",
+      "Maladie Aiguë": "bg-red-100 text-red-800 border-red-200",
+      "Maladie Chronique": "bg-orange-100 text-orange-800 border-orange-200",
+      "Porteur Sain": "bg-purple-100 text-purple-800 border-purple-200",
+      "Infirmier/Blessé": "bg-pink-100 text-pink-800 border-pink-200",
+      "État de Carence": "bg-amber-100 text-amber-800 border-amber-200",
+      "État Métabolique Critique": "bg-rose-100 text-rose-800 border-rose-200",
+      "État de Gestation": "bg-indigo-100 text-indigo-800 border-indigo-200"
+    };
+
+    function getHealthIcon(status) {
+      const icons = {
+        "Santé Optimale": `<svg class="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>`,
+        "Sub-optimal": `<svg class="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>`,
+        "Convalescence": `<svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>`,
+        "Maladie Aiguë": `<svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg>`,
+        "Maladie Chronique": `<svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
+        "Porteur Sain": `<svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6-4h6m2 5a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
+        "Infirmier/Blessé": `<svg class="w-4 h-4 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>`,
+        "État de Carence": `<svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>`,
+        "État Métabolique Critique": `<svg class="w-4 h-4 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>`,
+        "État de Gestation": `<svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>`
+      };
+      return icons[status] || `<svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
+    }
+
+    function getHealthTextColor(status) {
+      const colors = {
+        "Santé Optimale": "text-emerald-700",
+        "Sub-optimal": "text-yellow-700",
+        "Convalescence": "text-blue-700",
+        "Maladie Aiguë": "text-red-700",
+        "Maladie Chronique": "text-orange-700",
+        "Porteur Sain": "text-purple-700",
+        "Infirmier/Blessé": "text-pink-700",
+        "État de Carence": "text-amber-700",
+        "État Métabolique Critique": "text-rose-700",
+        "État de Gestation": "text-indigo-700"
+      };
+      return colors[status] || "text-gray-600";
+    }
+
+    function getHealthLabel(status) {
+      const labels = {
+        "Santé Optimale": "Parfait",
+        "Sub-optimal": "À surveiller",
+        "Convalescence": "En soin",
+        "Maladie Aiguë": "Urgent",
+        "Maladie Chronique": "Chronique",
+        "Porteur Sain": "Porteur",
+        "Infirmier/Blessé": "Blessé",
+        "État de Carence": "Carence",
+        "État Métabolique Critique": "Critique",
+        "État de Gestation": "Gestante"
+      };
+      return labels[status] || status;
+    }
+
     function createAnimalCard(animal) {
       const img = animal.profile_image ? `${API_BASE_URL}${animal.profile_image}` : `https://placehold.co/600x400/9ca3af/ffffff?text=${encodeURIComponent(animal.name[0])}`;
-      const healthColor = animal.health_status.includes('Bonne') ? 'bg-success/10 text-success' : 'bg-warning/10 text-warning';
-      const vaccineStatus = animal.last_vaccination ? 'Vacciné' : 'À vacciner';
-      const vaccineColor = animal.last_vaccination ? 'text-success' : 'text-warning';
+      const healthColor = healthColors[animal.health_status] || "bg-gray-100 text-gray-800 border-gray-200";
 
       return `
         <div class="bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 animate-slide-up group">
           <div class="relative h-56 overflow-hidden">
             <img src="${img}" alt="${animal.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400?text=404';">
-            <div class="absolute top-4 right-4 ${healthColor} px-3 py-1 rounded-full text-xs font-bold backdrop-blur-sm">
+            <div class="absolute top-4 right-4 ${healthColor} px-3 py-1 rounded-full text-xs font-bold backdrop-blur-sm border">
               ${animal.health_status}
             </div>
           </div>
@@ -317,10 +535,12 @@
             </div>
 
             <div class="flex items-center justify-between mt-4 text-xs">
-              <span class="flex items-center gap-1 ${vaccineColor}">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                ${vaccineStatus}
-              </span>
+              <div class="flex items-center gap-1.5">
+                ${getHealthIcon(animal.health_status)}
+                <span class="font-medium ${getHealthTextColor(animal.health_status)}">
+                  ${getHealthLabel(animal.health_status)}
+                </span>
+              </div>
               <span class="text-muted">Enclos #${animal.enclosure_id ?? '-'}</span>
             </div>
 
@@ -338,48 +558,166 @@
     }
 
     function updateStats(animals) {
-      const healthy = animals.filter(a => a.health_status.includes('Bonne')).length;
-      const vaccineDue = animals.filter(a => !a.last_vaccination).length;
+      const healthy = animals.filter(a => a.health_status === 'Santé Optimale').length;
+      const critical = animals.filter(a =>
+        ['Maladie Aiguë', 'État Métabolique Critique', 'Infirmier/Blessé'].includes(a.health_status)
+      ).length;
       const avgWeight = animals.length ? (animals.reduce((s, a) => s + (a.weight || 0), 0) / animals.length).toFixed(1) : 0;
 
       document.getElementById('animalCount').textContent = animals.length;
       document.getElementById('healthyCount').textContent = healthy;
-      document.getElementById('vaccineDue').textContent = vaccineDue;
+      document.getElementById('criticalCount').textContent = critical;
       document.getElementById('avgWeight').textContent = avgWeight;
     }
+
+    function populateFilters(animals) {
+      const speciesSet = new Set(animals.map(a => a.species));
+      const speciesSelect = document.getElementById('filterSpecies');
+      speciesSelect.innerHTML = '<option value="">Toutes les espèces</option>';
+      speciesSet.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s;
+        opt.textContent = s;
+        speciesSelect.appendChild(opt);
+      });
+
+      const healthSet = new Set(animals.map(a => a.health_status));
+      const healthContainer = document.getElementById('healthFilters');
+      healthContainer.innerHTML = '';
+      healthSet.forEach(status => {
+        const div = document.createElement('div');
+        div.className = 'flex items-center gap-2';
+        div.innerHTML = `
+          <input type="checkbox" id="health_${status.replace(/[^a-zA-Z0-9]/g, '')}" value="${status}" class="w-3.5 h-3.5 rounded border-gray-300 text-primary focus:ring-primary">
+          <label for="health_${status.replace(/[^a-zA-Z0-9]/g, '')}" class="text-xs cursor-pointer">${status}</label>
+        `;
+        healthContainer.appendChild(div);
+      });
+    }
+
+    function applyFilters() {
+      const selectedSpecies = document.getElementById('filterSpecies').value;
+      const checkedHealth = Array.from(document.querySelectorAll('#healthFilters input:checked')).map(cb => cb.value);
+      const tbody = document.getElementById('filterTableBody');
+
+      let filtered = allAnimals;
+
+      if (selectedSpecies) {
+        filtered = filtered.filter(a => a.species === selectedSpecies);
+      }
+      if (checkedHealth.length > 0) {
+        filtered = filtered.filter(a => checkedHealth.includes(a.health_status));
+      }
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-muted">Aucun animal trouvé</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(a => `
+        <tr class="border-b hover:bg-gray-50 transition">
+          <td class="px-4 py-3 font-medium">${a.name}</td>
+          <td class="px-4 py-3">${a.species}</td>
+          <td class="px-4 py-3">
+            <span class="inline-flex items-center gap-1 text-xs">
+              ${getHealthIcon(a.health_status)}
+              <span class="${getHealthTextColor(a.health_status)}">${getHealthLabel(a.health_status)}</span>
+            </span>
+          </td>
+          <td class="px-4 py-3">${a.age ?? '-'}</td>
+          <td class="px-4 py-3">${a.weight ?? '-'}</td>
+          <td class="px-4 py-3">#${a.enclosure_id ?? '-'}</td>
+        </tr>
+      `).join('');
+    }
+
+    document.getElementById('filterSpecies').addEventListener('change', applyFilters);
+    document.getElementById('healthFilters').addEventListener('change', applyFilters);
 
     async function fetchAnimals() {
       const container = document.getElementById('animalCardsContainer');
       const empty = document.getElementById('emptyState');
       showLoader('animalCardsContainer', 'cards');
       empty.classList.add('hidden');
+
       try {
-        const res = await fetch(`${API_BASE_URL}/animals/`);
+        const res = await fetch(`${API_BASE_URL}/animals/`, {
+          headers: { 'Accept': 'application/json' },
+          cache: 'no-cache'
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const contentType = res.headers.get('content-type');
+        if (!contentType?.includes('application/json')) throw new Error('Réponse non-JSON');
+
         const animals = await res.json();
-        container.innerHTML = animals.length ? animals.map(createAnimalCard).join('') : '';
+        allAnimals = animals;
+
+        container.innerHTML = animals.length
+          ? animals.map(createAnimalCard).join('')
+          : '<p class="col-span-full text-center text-muted py-10">Aucun animal</p>';
+
         empty.classList.toggle('hidden', animals.length > 0);
         updateStats(animals);
+        populateFilters(animals);
+        applyFilters();
+
       } catch (err) {
-        container.innerHTML = `<p class="col-span-full text-danger text-center py-10">Erreur de chargement</p>`;
+        console.error("fetchAnimals error:", err);
+        container.innerHTML = `
+          <div class="col-span-full text-center py-16">
+            <p class="text-danger font-bold">Erreur de chargement</p>
+            <p class="text-sm text-muted mt-1">${err.message}</p>
+            <button onclick="fetchAnimals()" class="mt-4 px-6 py-2 bg-primary text-white rounded-xl text-sm font-bold hover:bg-accent transition">
+              Réessayer
+            </button>
+          </div>
+        `;
       }
     }
 
     async function handleSubmit() {
       const form = document.getElementById('addAnimalForm');
-      const data = new FormData(form);
-      ['age', 'weight', 'last_vaccination', 'enclosure_id'].forEach(f => !data.get(f) && data.delete(f));
+      const formData = new FormData(form);
 
-      const url = editingAnimalId ? `${API_BASE_URL}/animals/${editingAnimalId}` : `${API_BASE_URL}/animals/`;
+      const fileInput = document.getElementById('file');
+      if (fileInput && fileInput.files[0]) {
+        formData.append('file', fileInput.files[0]);
+      }
+
+      for (let [key, value] of formData.entries()) {
+        if (value === '' || value === null || (value instanceof File && value.size === 0)) {
+          if (key !== 'file') formData.delete(key);
+        }
+      }
+
+      const url = editingAnimalId
+        ? `${API_BASE_URL}/animals/${editingAnimalId}`
+        : `${API_BASE_URL}/animals/`;
+
       const method = editingAnimalId ? 'PUT' : 'POST';
-      showLoader(modal, 'modal');
+
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<div class="loader"></div><span class="ml-2">Enregistrement...</span>`;
+
       try {
-        const res = await fetch(url, { method, body: data });
-        if (!res.ok) throw new Error((await res.json()).detail || "Erreur");
-        showMessage(editingAnimalId ? "Mis à jour avec succès !" : "Animal ajouté !");
-        toggleModal();
-        fetchAnimals();
+        const res = await fetch(url, { method, body: formData });
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => ({ detail: "Erreur inconnue" }));
+          throw new Error(errorData.detail || `HTTP ${res.status}`);
+        }
+
+        showMessage(editingAnimalId ? "Animal modifié !" : "Animal ajouté !");
+        setTimeout(() => window.location.reload(), 800);
+
       } catch (err) {
-        showMessage(err.message, 'error');
+        console.error("Erreur:", err);
+        showMessage(err.message || "Échec de l'enregistrement", 'error');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
       }
     }
 
@@ -399,7 +737,7 @@
         await fetch(`${API_BASE_URL}/animals/${animalToDelete}`, { method: 'DELETE' });
         showMessage("Animal supprimé", 'success');
         closeDeleteModal();
-        fetchAnimals();
+        setTimeout(() => window.location.reload(), 800);
       } catch (err) {
         showMessage("Échec de suppression", 'error');
       }
@@ -409,67 +747,30 @@
   </script>
 
   <script>
-  function showLoader(containerId, type = 'cards') {
-    const container = document.getElementById(containerId);
-    if (!container) return;
+    function showLoader(containerId, type = 'cards') {
+      const container = document.getElementById(containerId);
+      if (!container) return;
 
-    let loaderHTML = '';
+      let loaderHTML = '';
 
-    if (type === 'cards') {
-      loaderHTML = Array(6).fill().map(() => `
-        <div class="bg-white rounded-3xl shadow-lg p-6 animate-pulse">
-          <div class="skeleton-image mb-4"></div>
-          <div class="space-y-3">
-            <div class="skeleton-text"></div>
-            <div class="skeleton-text-short"></div>
-            <div class="flex gap-2">
-              <div class="skeleton-button flex-1"></div>
-              <div class="skeleton-button flex-1"></div>
+      if (type === 'cards') {
+        loaderHTML = Array(6).fill().map(() => `
+          <div class="bg-white rounded-3xl shadow-lg p-6 animate-pulse">
+            <div class="skeleton-image mb-4"></div>
+            <div class="space-y-3">
+              <div class="skeleton-text"></div>
+              <div class="skeleton-text-short"></div>
+              <div class="flex gap-2">
+                <div class="skeleton-button flex-1"></div>
+                <div class="skeleton-button flex-1"></div>
+              </div>
             </div>
           </div>
-        </div>
-      `).join('');
-    }
+        `).join('');
+      }
 
-    else if (type === 'stats') {
-      loaderHTML = Array(4).fill().map(() => `
-        <div class="bg-white/80 backdrop-blur-sm p-6 rounded-3xl shadow-lg border border-accent/20">
-          <div class="flex items-center justify-between mb-3">
-            <div class="skeleton-circle"></div>
-            <div class="skeleton-text-short"></div>
-          </div>
-          <div class="h-10 skeleton rounded-lg"></div>
-          <div class="h-4 skeleton mt-2 w-16"></div>
-        </div>
-      `).join('');
+      container.innerHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">${loaderHTML}</div>`;
     }
-
-    else if (type === 'modal') {
-      const form = container.querySelector('form');
-      const loadingDiv = container.querySelector('#modalLoading') || document.createElement('div');
-      loadingDiv.id = 'modalLoading';
-      loadingDiv.innerHTML = `
-        <div class="flex flex-col items-center justify-center py-8 space-y-4">
-          <div class="loader"></div>
-          <p class="text-sm text-muted">Traitement en cours...</p>
-        </div>
-      `;
-      loadingDiv.className = 'space-y-4';
-      form.classList.add('hidden');
-      container.appendChild(loadingDiv);
-      return;
-    }
-
-    container.innerHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">${loaderHTML}</div>`;
-  }
-
-  function hideLoader(containerId, type = 'cards') {
-    const loadingDiv = document.getElementById('modalLoading');
-    if (loadingDiv) {
-      loadingDiv.remove();
-      document.querySelector('#addAnimalForm')?.classList.remove('hidden');
-    }
-  }
-</script>
+  </script>
 </body>
 </html>
