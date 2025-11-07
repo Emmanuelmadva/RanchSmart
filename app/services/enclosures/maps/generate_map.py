@@ -1,22 +1,57 @@
+from folium.plugins import Draw
 import folium
-import os
 
 def generate_map():
-    """Génère une carte Folium et retourne le chemin du fichier HTML."""
-    # Crée la carte centrée sur une position (latitude, longitude)
-    m = folium.Map(location=[3.848, 11.502], zoom_start=13)
+    output_path = "app/static/maps/generated_map.html"
+    lat, lon = 7.417017, 13.541282
 
-    # Exemple : ajout d’un marqueur
-    folium.Marker(
-        [3.848, 11.502],
-        popup="Zone d'enclos 1",
-        tooltip="Cliquer pour plus d'infos"
+    m = folium.Map(location=[lat, lon], zoom_start=19, tiles=None, max_zoom=22, control_scale=True)
+
+    # Calque Satellite
+    folium.TileLayer(
+        tiles="https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
+        attr="Google Satellite",
+        name="Satellite",
+        overlay=False,
+        control=True,
+        max_zoom=22
     ).add_to(m)
 
-    # Dossier de sortie
-    output_dir = os.path.join("app", "static", "maps")
-    os.makedirs(output_dir, exist_ok=True)
+    # Calque Routes
+    folium.TileLayer(
+        tiles="https://mt1.google.com/vt/lyrs=h&x={x}&y={y}&z={z}",
+        attr="Google Roads",
+        name="Routes",
+        overlay=True,
+        control=True,
+        max_zoom=22
+    ).add_to(m)
 
-    map_path = os.path.join(output_dir, "map.html")
-    m.save(map_path)
-    return map_path
+    # Marker du point
+    folium.Marker([lat, lon], popup="Point d'intérêt").add_to(m)
+
+    # FeatureGroup supplémentaire
+    feature_group = folium.FeatureGroup(name="Calque supplémentaire")
+    folium.CircleMarker([lat, lon], radius=10, color='red', fill=True, fill_opacity=0.5).add_to(feature_group)
+    feature_group.add_to(m)
+
+    # Draw plugin avec outils personnalisés
+    Draw(
+        export=True,
+        position='topleft',
+        draw_options={
+            'polyline': False,
+            'polygon': False,
+            'circle': False,
+            'rectangle': False,
+            'marker': True,
+            'circlemarker': False
+        },
+        edit_options={'edit': True, 'remove': True}
+    ).add_to(m)
+
+    # Contrôle des calques
+    folium.LayerControl().add_to(m)
+
+    m.save(output_path)
+    return output_path

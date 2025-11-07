@@ -4,7 +4,7 @@ from typing import List
 from app.services.enclosures import models, schemas
 from database.connection import get_db
 
-enclosure_router = APIRouter(prefix="/enclosures", tags=["Enclos"])
+enclosure_router = APIRouter()
 
 # Créer un enclos
 @enclosure_router.post("/", response_model=schemas.EnclosureRead)

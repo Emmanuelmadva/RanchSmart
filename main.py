@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
-from app.services.enclosures.maps import generate_map
+from app.services.enclosures.maps.generate_map import generate_map
 import os
 
 
@@ -36,7 +36,7 @@ DASHBOARD_DIR = STATIC_DIR / "template" / "pages" / "dashboardUser"
 ANIMALS_DIR = ASSETS_DIR / "animals"
 
 os.makedirs(ANIMALS_DIR, exist_ok=True)
-
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 app.mount("/dashboardUser", StaticFiles(directory=DASHBOARD_DIR), name="dashboard")  # OK
 
@@ -74,11 +74,10 @@ def dashboard_enclos():
 
 @app.get("/map", response_class=HTMLResponse)
 def get_map():
-    """Génère et renvoie la carte Folium."""
-    map_path = generate_map()  # ta fonction doit retourner le chemin du fichier HTML généré
+    map_path = generate_map()  # génère et retourne le chemin du fichier HTML de la carte
     with open(map_path, "r", encoding="utf-8") as f:
-        html_content = f.read()
-    return HTMLResponse(content=html_content)
+        map_html = f.read()
+    return HTMLResponse(content=map_html)
 
 app.include_router(auth_router, prefix="/auth", tags=["Auth"])
 app.include_router(animal_router, prefix="/animals", tags=["Animaux"])
