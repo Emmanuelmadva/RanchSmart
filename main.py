@@ -34,6 +34,7 @@ STATIC_DIR = Path(__file__).parent / "app" / "static"  # ABSOLU
 ASSETS_DIR = STATIC_DIR / "assets"
 DASHBOARD_DIR = STATIC_DIR / "template" / "pages" / "dashboardUser"
 ANIMALS_DIR = ASSETS_DIR / "animals"
+STAFF_IMG_DIR = ASSETS_DIR / "staff_profiles"
 
 os.makedirs(ANIMALS_DIR, exist_ok=True)
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
@@ -56,7 +57,7 @@ def dashboard_index():
     except FileNotFoundError:
         return HTMLResponse(content="<h1>404</h1><p>index.html non trouvé</p>", status_code=404)
 
-@app.get("/dashboard/animals", response_class=HTMLResponse)
+@app.get("/dashboard/animaux", response_class=HTMLResponse)
 def dashboard_animals():
     file_path = DASHBOARD_DIR / "cards.html"
     try:
@@ -71,6 +72,14 @@ def dashboard_enclos():
         return HTMLResponse(content=file_path.read_text(encoding="utf-8"))
     except FileNotFoundError:
         return HTMLResponse(content="<h1>404</h1><p>enclos.html non trouvé</p>", status_code=404)
+
+@app.get("/dashboard/staff", response_class=HTMLResponse)
+def dashboard_staff():
+    file_path = DASHBOARD_DIR / "staff.html"  # <-- Corrigé
+    try:
+        return HTMLResponse(content=file_path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        return HTMLResponse(content="<h1>404</h1><p>staff.html non trouvé</p>", status_code=404)
 
 @app.get("/map", response_class=HTMLResponse)
 def get_map():

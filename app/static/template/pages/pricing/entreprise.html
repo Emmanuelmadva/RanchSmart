@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Plan Entreprise | RanchSmart</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Rye&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { rye: ['"Rye"', 'cursive'], montserrat: ['Montserrat', 'sans-serif'] },
+          colors: { primary: '#8B4513', accent: '#DAA520', dark: '#2F1B12', success: '#10B981' },
+        }
+      }
+    }
+  </script>
+</head>
+<body class="font-montserrat bg-gradient-to-br from-gray-900 via-dark to-primary min-h-screen text-white">
+
+  <!-- Navbar -->
+  <nav class="fixed top-0 w-full bg-black/50 backdrop-blur-md shadow-lg z-50 h-20">
+    <div class="container mx-auto px-4 h-full flex justify-between items-center">
+      <a href="/" class="flex items-center">
+        <img src="/static/assets/Logo_P1.png" alt="RanchSmart" class="h-24 md:h-28 lg:h-32 w-auto max-h-full object-contain ">
+      </a>
+      <div class="flex items-center space-x-6">
+        <a href="/#features" class="text-white hover:text-accent font-bold">Fonctionnalités</a>
+        <a href="/#pricing" class="text-white hover:text-accent font-bold">Tarifs</a>
+        <button onclick="contactSales()" class="bg-accent text-white px-6 py-2 rounded-full font-bold hover:bg-yellow-600 transition">Nous contacter</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="pt-32 pb-20 text-center px-6">
+    <div class="container mx-auto max-w-5xl" data-aos="fade-up">
+      <div class="inline-block bg-gradient-to-r from-accent to-yellow-500 text-white px-6 py-2 rounded-full text-sm font-bold mb-6">SUR MESURE</div>
+      <h1 class="text-5xl md:text-7xl font-rye mb-6">Solution <span class="text-accent">Entreprise</span></h1>
+      <p class="text-xl mb-8 max-w-3xl mx-auto">Pour les grandes exploitations, coopératives et institutions agricoles.</p>
+      <div class="text-5xl font-bold mb-2">Prix sur devis</div>
+      <p class="text-gray-300 mb-10">À partir de 150 000 XAF / mois</p>
+      <button onclick="contactSales()" class="bg-white text-primary font-bold py-5 px-16 rounded-full text-xl shadow-2xl hover:shadow-accent transform hover:scale-105 transition">
+        Demander un devis
+      </button>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="py-20">
+    <div class="container mx-auto px-6 max-w-6xl">
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 text-center">
+        <div class="bg-white/10 backdrop-blur-sm p-8 rounded-3xl" data-aos="fade-up">
+          <i data-feather="shield" class="w-12 h-12 text-accent mb-4"></i>
+          <h3 class="text-xl font-bold mb-3">Sécurité entreprise</h3>
+          <p class="text-gray-300">SSO, LDAP, audit logs</p>
+        </div>
+        <div class="bg-white/10 backdrop-blur-sm p-8 rounded-3xl" data-aos="fade-up" data-aos-delay="100">
+          <i data-feather="server" class="w-12 h-12 text-accent mb-4"></i>
+          <h3 class="text-xl font-bold mb-3">Hébergement dédié</h3>
+          <p class="text-gray-300">Serveur privé • SLA 99.9%</p>
+        </div>
+        <div class="bg-white/10 backdrop-blur-sm p-8 rounded-3xl" data-aos="fade-up" data-aos-delay="200">
+          <i data-feather="users" class="w-12 h-12 text-accent mb-4"></i>
+          <h3 class="text-xl font-bold mb-3">Formation & onboarding</h3>
+          <p class="text-gray-300">Équipe dédiée sur site</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-20 text-center">
+    <h3 class="text-4xl font-rye mb-6" data-aos="fade-up">Une solution taillée pour votre ranch</h3>
+    <button onclick="contactSales()" class="bg-accent hover:bg-yellow-600 text-white font-bold py-5 px-16 rounded-full text-xl shadow-xl transform hover:scale-105 transition">
+      Parler à un expert
+    </button>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-black/50 py-10 text-center">
+    <p class="text-sm">© 2025 RanchSmart. Tous droits réservés.</p>
+  </footer>
+
+  <script>
+    AOS.init({ once: true });
+    feather.replace();
+
+    function contactSales() {
+      window.open('mailto:contact@ranchsmart.com?subject=Demande%20devis%20Entreprise', '_blank');
+    }
+  </script>
+</body>
+</html>

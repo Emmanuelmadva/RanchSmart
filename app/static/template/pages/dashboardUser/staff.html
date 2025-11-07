@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Staff | RanchSmart</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#8B4513',    
+            accent: '#DAA520',     
+            dark: '#2F1B12',
+            success: '#10B981',
+            warning: '#F59E0B',
+            danger: '#EF4444',
+            muted: '#6B7280',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.3s ease-out',
+            'slide-up': 'slideUp 0.4s ease-out',
+            'pulse-soft': 'pulseSoft 2s infinite',
+            'collapse': 'collapse 0.3s ease-out',
+          },
+          keyframes: {
+            fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+            slideUp: { '0%': { transform: 'translateY(20px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
+            pulseSoft: { '0%, 100%': { opacity: '1' }, '50%': { opacity: '0.8' } },
+            collapse: { '0%': { height: 'auto', opacity: '1' }, '100%': { height: '0', opacity: '0', overflow: 'hidden' } }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #f3f4f6; }
+    ::-webkit-scrollbar-thumb { background: #DAA520; border-radius: 3px; }
+
+    .skeleton {
+      @apply bg-gray-200 rounded-lg animate-pulse;
+    }
+    .skeleton-text { @apply h-4 w-full skeleton; }
+    .skeleton-text-short { @apply h-4 w-3/4 skeleton; }
+    .skeleton-circle { @apply w-12 h-12 rounded-full skeleton; }
+    .skeleton-image { @apply w-full h-48 rounded-xl skeleton; }
+    .skeleton-button { @apply h-10 w-full rounded-lg skeleton; }
+
+    .loader {
+      @apply inline-block w-8 h-8 border-4 border-t-accent border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin;
+    }
+
+    .table-container {
+      max-height: 500px;
+      overflow-y: auto;
+      transition: all 0.3s ease;
+    }
+
+    .collapsible-content {
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+
+    .collapsible-content.closed {
+      height: 0 !important;
+      opacity: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-amber-50 to-orange-50 font-sans antialiased">
+
+  <!-- SIDEBAR -->
+  <aside class="fixed inset-y-0 left-0 w-64 bg-white shadow-xl z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
+    <div class="p-6 border-b border-gray-100">
+      <a href="/dashboard" class="flex items-center">
+        <img src="/static/assets/Logo_P1.png" alt="RanchSmart" class="h-18 md:h-24 lg:h-30 w-auto max-h-full object-contain">
+      </a>
+    </div>
+
+    <!-- NAV PRINCIPALE -->
+    <nav class="mt-6 px-4">
+      <ul class="space-y-1">
+        <li>
+          <a href="/dashboard" class="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-primary/10 rounded-xl transition-all duration-200">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            <span class="font-medium">Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="/dashboard/animaux" class="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-primary/10 rounded-xl transition-all duration-200">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+            <span>Animaux</span>
+          </a>
+        </li>
+        <li>
+          <a href="/dashboard/staff" class="flex items-center space-x-3 px-4 py-3 bg-gradient-to-r from-primary/10 to-accent/10 text-primary rounded-xl font-semibold shadow-sm">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H9a2 2 0 01-2-2v-1a6 6 0 0112 0v1a2 2 0 01-2 2z"/></svg>
+            <span>Staff</span>
+          </a>
+        </li>
+          <li>
+            <a href="/dashboard/enclos" class="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-primary/10 rounded-xl transition-all duration-200">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2l9 4-9 4-9-4 9-4zm0 8l9 4-9 4-9-4 9-4zm0 8l9 4-9 4-9-4 9-4z" />
+                </svg>
+                <span class="font-medium">Enclos</span>
+            </a>
+          </li>
+      </ul>
+    </nav>
+
+    <!-- FILTRES COLLAPSIBLES -->
+    <div class="mt-3 px-4 pb-6 border-t border-gray-100">
+      <button onclick="toggleFilters()" class="w-full flex items-center justify-between text-sm font-bold text-primary uppercase tracking-wider mb-2 hover:text-accent transition">
+        <span>Filtrer par</span>
+        <svg id="filterToggleIcon" class="w-4 h-4 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </button>
+
+      <div id="filterContent" class="collapsible-content">
+        <!-- FILTRE RÔLE -->
+        <div class="mb-3">
+          <label class="block text-xs font-medium text-muted mb-1">Rôle</label>
+          <select id="filterRole" class="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-primary focus:outline-none">
+            <option value="">Tous les rôles</option>
+            <option value="cowboy">Cowboy</option>
+            <option value="vet">Vétérinaire</option>
+            <option value="caretaker">Soigneur</option>
+            <option value="admin">Administrateur</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOUTON DÉCONNEXION -->
+    <div class="mt-auto px-4 pb-6 border-t border-gray-100">
+      <button onclick="logout()" class="w-full flex items-center justify-center gap-3 px-4 py-3 bg-gradient-to-r from-danger/10 to-danger/5 text-danger font-semibold rounded-xl hover:from-danger/20 hover:to-danger/10 transition-all duration-300 group">
+        <svg class="w-5 h-5 group-hover:animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+        </svg>
+        <span>Déconnexion</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="lg:ml-64 p-6 min-h-screen">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 animate-slide-up">
+      <div>
+        <h1 class="text-4xl font-bold text-gray-800 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+          Équipe du Ranch
+        </h1>
+        <p class="text-muted mt-1 flex items-center gap-2">
+          <span id="staffCount">0</span> membres enregistrés
+          <span class="w-2 h-2 bg-accent rounded-full animate-pulse"></span>
+        </p>
+      </div>
+      <button onclick="toggleModal()" class="group bg-gradient-to-r from-primary to-accent text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center gap-3">
+        <svg class="w-5 h-5 group-hover:animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        Nouvel Employé
+      </button>
+    </div>
+
+    <!-- STATS -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div class="bg-white/80 backdrop-blur-sm p-4 rounded-xl shadow-sm border border-accent/20">
+        <p class="text-xs text-muted">Cowboys</p>
+        <p id="cowboyCount" class="text-2xl font-bold text-primary">0</p>
+      </div>
+      <div class="bg-white/80 backdrop-blur-sm p-4 rounded-xl shadow-sm border border-accent/20">
+        <p class="text-xs text-muted">Vétérinaires</p>
+        <p id="vetCount" class="text-2xl font-bold text-success">0</p>
+      </div>
+      <div class="bg-white/80 backdrop-blur-sm p-4 rounded-xl shadow-sm border border-accent/20">
+        <p class="text-xs text-muted">Soigneurs</p>
+        <p id="caretakerCount" class="text-2xl font-bold text-accent">0</p>
+      </div>
+      <div class="bg-white/80 backdrop-blur-sm p-4 rounded-xl shadow-sm border border-accent/20">
+        <p class="text-xs text-muted">Admins</p>
+        <p id="adminCount" class="text-2xl font-bold text-warning">0</p>
+      </div>
+    </div>
+
+    <!-- TABLEAU COLLAPSIBLE -->
+    <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-bold text-primary">Liste des employés</h2>
+        <button onclick="toggleTable()" class="flex items-center gap-2 text-sm font-medium text-primary hover:text-accent transition">
+          <svg id="tableToggleIcon" class="w-4 h-4 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+          <span id="tableToggleText">Masquer le tableau</span>
+        </button>
+      </div>
+
+      <div id="tableContent" class="collapsible-content">
+        <div class="table-container border border-gray-200 rounded-lg">
+          <table class="w-full text-sm">
+            <thead class="bg-primary/5 sticky top-0">
+              <tr>
+                <th class="text-left px-4 py-3 font-medium text-primary">Nom</th>
+                <th class="text-left px-4 py-3 font-medium text-primary">Email</th>
+                <th class="text-left px-4 py-3 font-medium text-primary">Rôle</th>
+                <th class="text-left px-4 py-3 font-medium text-primary">Téléphone</th>
+                <th class="text-left px-4 py-3 font-medium text-primary">Animaux</th>
+              </tr>
+            </thead>
+            <tbody id="filterTableBody">
+              <tr><td colspan="5" class="text-center py-10 text-muted">Chargement...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARTES -->
+    <div id="staffCardsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 auto-rows-fr">
+      <div id="emptyState" class="col-span-full text-center py-20 animate-fade-in">
+        <div class="mx-auto w-32 h-32 bg-accent/10 rounded-full flex items-center justify-center mb-4">
+          <svg class="w-16 h-16 text-accent/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+        </div>
+        <p class="text-lg text-muted font-medium">Aucun employé pour le moment</p>
+        <p class="text-sm text-muted/70">Commencez par en ajouter un !</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- LOADER DE DÉCONNEXION -->
+  <div id="logoutLoader" class="fixed inset-0 bg-white/90 backdrop-blur-md z-50 hidden flex items-center justify-center">
+    <div class="text-center">
+      <div class="loader mx-auto mb-6"></div>
+      <p class="text-lg font-semibold text-primary">Déconnexion en cours...</p>
+    </div>
+  </div>
+
+  <!-- MODAL AJOUT/MODIF -->
+  <div id="addStaffModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 animate-fade-in">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-screen overflow-y-auto animate-slide-up">
+      <div class="sticky top-0 bg-white border-b border-gray-100 p-6 flex items-center justify-between">
+        <h3 id="modalTitle" class="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Nouvel Employé</h3>
+        <button onclick="toggleModal()" class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <form id="addStaffForm" onsubmit="event.preventDefault(); handleSubmit()" class="p-6 space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="relative">
+            <input type="text" name="name" required placeholder=" " class="peer w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none transition">
+            <label class="absolute left-4 -top-3 bg-white px-2 text-sm text-muted peer-focus:text-primary transition">Nom complet</label>
+          </div>
+          <div class="relative">
+            <input type="email" name="email" required placeholder=" " class="peer w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none transition">
+            <label class="absolute left-4 -top-3 bg-white px-2 text-sm text-muted peer-focus:text-primary transition">Email</label>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="relative">
+            <select name="role" required class="peer w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none transition appearance-none bg-white">
+              <option value="" disabled selected>Choisir un rôle</option>
+              <option value="cowboy">Cowboy</option>
+              <option value="vet">Vétérinaire</option>
+              <option value="caretaker">Soigneur</option>
+              <option value="admin">Administrateur</option>
+            </select>
+            <label class="absolute left-4 -top-3 bg-white px-2 text-sm text-muted peer-focus:text-primary transition pointer-events-none">Rôle</label>
+            <svg class="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </div>
+          <input type="tel" name="phone" placeholder="Téléphone (optionnel)" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-3">Photo de profil</label>
+          <div class="relative">
+            <img id="photoPreview" src="" alt="Aperçu" class="w-full h-48 object-cover rounded-2xl mb-3 hidden shadow-md">
+            <label class="flex flex-col items-center justify-center w-full h-40 border-3 border-dashed border-accent/40 rounded-2xl cursor-pointer bg-gradient-to-br from-accent/5 to-primary/5 hover:from-accent/10 hover:to-primary/10 transition-all duration-300">
+              <svg class="w-10 h-10 text-accent mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              <span id="uploadText" class="text-accent font-medium">Choisir une photo</span>
+              <input id="file" name="file" type="file" accept="image/*" class="hidden">
+            </label>
+          </div>
+        </div>
+
+        <div id="messageBox" class="p-4 text-sm rounded-xl hidden animate-fade-in"></div>
+
+        <div class="flex gap-4 pt-4 border-t border-gray-100">
+          <button type="submit" class="flex-1 bg-gradient-to-r from-primary to-accent text-white font-bold py-3.5 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+            Enregistrer
+          </button>
+          <button type="button" onclick="toggleModal()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3.5 rounded-xl transition">
+            Annuler
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL ASSIGNATION ANIMAL -->
+  <div id="assignModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 animate-fade-in">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 animate-slide-up">
+      <h3 class="text-2xl font-bold text-primary mb-6">Assigner un animal</h3>
+      <form id="assignForm" onsubmit="event.preventDefault(); assignAnimal()" class="space-y-5">
+        <div>
+          <label class="block text-sm font-medium text-muted mb-2">Sélectionner un animal</label>
+          <select id="animalSelect" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none">
+            <option value="">Choisir un animal</option>
+          </select>
+        </div>
+        <input type="hidden" id="staffIdForAssign">
+        <div class="flex gap-4 pt-4 border-t border-gray-100">
+          <button type="submit" class="flex-1 bg-gradient-to-r from-primary to-accent text-white font-bold py-3 rounded-xl shadow-lg hover:shadow-xl transition">
+            Assigner
+          </button>
+          <button type="button" onclick="closeAssignModal()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3 rounded-xl transition">
+            Annuler
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL SUPPRESSION -->
+  <div id="deleteModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 animate-fade-in">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 text-center animate-slide-up">
+      <div class="w-20 h-20 mx-auto mb-6 bg-danger/10 rounded-full flex items-center justify-center">
+        <svg class="w-12 h-12 text-danger animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+      </div>
+      <h3 class="text-2xl font-bold text-gray-800 mb-3">Confirmer la suppression</h3>
+      <p class="text-muted mb-8">Cette action est <span class="text-danger font-bold">irréversible</span>. Êtes-vous sûr ?</p>
+      <div class="flex gap-4">
+        <button id="confirmDelete" class="flex-1 bg-danger hover:bg-red-600 text-white font-bold py-3 rounded-xl transition transform hover:scale-105">
+          Supprimer
+        </button>
+        <button onclick="closeDeleteModal()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3 rounded-xl transition">
+          Annuler
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script>
+    const API_BASE_URL = 'http://127.0.0.1:8000';
+    let editingStaffId = null;
+    let staffToDelete = null;
+    let allStaff = [];
+    let allAnimals = [];
+
+    // === DÉCONNEXION ===
+    function logout() {
+      const loader = document.getElementById('logoutLoader');
+      loader.classList.remove('hidden');
+      setTimeout(() => {
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.href = '/';
+      }, 2000);
+    }
+
+    // === COLLAPSIBLES ===
+    function toggleFilters() {
+      const content = document.getElementById('filterContent');
+      const icon = document.getElementById('filterToggleIcon');
+      content.classList.toggle('closed');
+      icon.classList.toggle('rotate-180');
+    }
+
+    function toggleTable() {
+      const content = document.getElementById('tableContent');
+      const icon = document.getElementById('tableToggleIcon');
+      const text = document.getElementById('tableToggleText');
+      content.classList.toggle('closed');
+      icon.classList.toggle('rotate-180');
+      text.textContent = content.classList.contains('closed') ? 'Afficher le tableau' : 'Masquer le tableau';
+    }
+
+    // === MODAL PRINCIPAL ===
+    function toggleModal() {
+      const modal = document.getElementById('addStaffModal');
+      modal.classList.toggle('hidden');
+      if (modal.classList.contains('hidden')) {
+        document.getElementById('addStaffForm').reset();
+        document.getElementById('photoPreview').classList.add('hidden');
+        document.getElementById('uploadText').textContent = 'Choisir une photo';
+        editingStaffId = null;
+        document.getElementById('modalTitle').textContent = 'Nouvel Employé';
+      }
+    }
+
+    // === MODAL ASSIGNATION ===
+    function openAssignModal(staffId) {
+      document.getElementById('staffIdForAssign').value = staffId;
+      document.getElementById('assignModal').classList.remove('hidden');
+      populateAnimalSelect();
+    }
+
+    function closeAssignModal() {
+      document.getElementById('assignModal').classList.add('hidden');
+    }
+
+    async function populateAnimalSelect() {
+      try {
+        const res = await fetch(`${API_BASE_URL}/animals/`);
+        const animals = await res.json();
+        const select = document.getElementById('animalSelect');
+        select.innerHTML = '<option value="">Choisir un animal</option>';
+        animals.forEach(a => {
+          const opt = document.createElement('option');
+          opt.value = a.id;
+          opt.textContent = `${a.name} (#${a.id})`;
+          select.appendChild(opt);
+        });
+      } catch (err) {
+        console.error("Erreur chargement animaux:", err);
+      }
+    }
+
+    async function assignAnimal() {
+      const staffId = document.getElementById('staffIdForAssign').value;
+      const animalId = document.getElementById('animalSelect').value;
+      if (!animalId) return;
+
+      try {
+        const res = await fetch(`${API_BASE_URL}/staff/${staffId}/assign-animal/${animalId}`, { method: 'POST' });
+        const data = await res.json();
+        showMessage(data.detail || "Animal assigné !");
+        closeAssignModal();
+        setTimeout(() => window.location.reload(), 800);
+      } catch (err) {
+        showMessage("Échec assignation", 'error');
+      }
+    }
+
+    // === MODAL SUPPRESSION ===
+    function openDeleteModal(id) {
+      staffToDelete = id;
+      document.getElementById('deleteModal').classList.remove('hidden');
+    }
+
+    function closeDeleteModal() {
+      document.getElementById('deleteModal').classList.add('hidden');
+      staffToDelete = null;
+    }
+
+    document.getElementById('confirmDelete').onclick = async () => {
+      if (!staffToDelete) return;
+      try {
+        await fetch(`${API_BASE_URL}/staff/${staffToDelete}`, { method: 'DELETE' });
+        showMessage("Employé supprimé");
+        closeDeleteModal();
+        setTimeout(() => window.location.reload(), 800);
+      } catch (err) {
+        showMessage("Échec suppression", 'error');
+      }
+    };
+
+    // === FILTRES & STATS ===
+    function updateStats(staff) {
+      const counts = {
+        cowboy: staff.filter(s => s.role === 'cowboy').length,
+        vet: staff.filter(s => s.role === 'vet').length,
+        caretaker: staff.filter(s => s.role === 'caretaker').length,
+        admin: staff.filter(s => s.role === 'admin').length
+      };
+      document.getElementById('staffCount').textContent = staff.length;
+      document.getElementById('cowboyCount').textContent = counts.cowboy;
+      document.getElementById('vetCount').textContent = counts.vet;
+      document.getElementById('caretakerCount').textContent = counts.caretaker;
+      document.getElementById('adminCount').textContent = counts.admin;
+    }
+
+    function applyFilters() {
+      const role = document.getElementById('filterRole').value;
+      const tbody = document.getElementById('filterTableBody');
+      let filtered = allStaff;
+
+      if (role) filtered = filtered.filter(s => s.role === role);
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center py-8 text-muted">Aucun employé</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(s => `
+        <tr class="border-b hover:bg-gray-50">
+          <td class="px-4 py-3 font-medium">${s.name}</td>
+          <td class="px-4 py-3">${s.email}</td>
+          <td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-medium ${getRoleBadge(s.role)}">${getRoleLabel(s.role)}</span></td>
+          <td class="px-4 py-3">${s.phone || '-'}</td>
+          <td class="px-4 py-3">${s.assigned_animals?.length || 0}</td>
+        </tr>
+      `).join('');
+    }
+
+    document.getElementById('filterRole').addEventListener('change', applyFilters);
+
+    function getRoleBadge(role) {
+      const badges = {
+        cowboy: 'bg-amber-100 text-amber-800',
+        vet: 'bg-green-100 text-green-800',
+        caretaker: 'bg-blue-100 text-blue-800',
+        admin: 'bg-purple-100 text-purple-800'
+      };
+      return badges[role] || 'bg-gray-100 text-gray-800';
+    }
+
+    function getRoleLabel(role) {
+      const labels = { cowboy: 'Cowboy', vet: 'Vétérinaire', caretaker: 'Soigneur', admin: 'Admin' };
+      return labels[role] || role;
+    }
+
+    // === CARTES & CHARGEMENT ===
+    function createStaffCard(staff) {
+      const img = staff.profile_image ? `${API_BASE_URL}${staff.profile_image}` : `https://placehold.co/400x400/9ca3af/ffffff?text=${encodeURIComponent(staff.name[0])}`;
+      return `
+        <div class="bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 group">
+          <div class="h-48 overflow-hidden relative">
+            <img src="${img}" alt="${staff.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/400x400?text=404';">
+            <div class="absolute bottom-3 right-3 ${getRoleBadge(staff.role)} px-3 py-1 rounded-full text-xs font-bold">
+              ${getRoleLabel(staff.role)}
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="font-bold text-xl text-gray-800 truncate">${staff.name}</h3>
+            <p class="text-sm text-muted mt-1">${staff.email}</p>
+            <p class="text-xs text-muted/70 mt-2">${staff.phone || 'Pas de téléphone'}</p>
+
+            <div class="flex items-center justify-between mt-4 text-sm">
+              <span class="font-medium text-primary">${staff.assigned_animals?.length || 0} animaux</span>
+              <button onclick="openAssignModal(${staff.id})" class="text-accent hover:underline text-xs">Assigner +</button>
+            </div>
+
+            <div class="flex gap-3 mt-5">
+              <button onclick='openEditModal(${JSON.stringify(staff)})' class="flex-1 bg-gradient-to-r from-primary/10 to-accent/10 text-primary font-bold text-sm py-2.5 rounded-xl hover:from-primary/20 hover:to-accent/20 transition">
+                Modifier
+              </button>
+              <button onclick="openDeleteModal(${staff.id})" class="flex-1 bg-danger/10 text-danger font-bold text-sm py-2.5 rounded-xl hover:bg-danger/20 transition">
+                Supprimer
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function fetchStaff() {
+      const container = document.getElementById('staffCardsContainer');
+      const empty = document.getElementById('emptyState');
+      showLoader('staffCardsContainer', 'cards');
+      empty.classList.add('hidden');
+
+      try {
+        const res = await fetch(`${API_BASE_URL}/staff/`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const staff = await res.json();
+        allStaff = staff;
+
+        container.innerHTML = staff.length 
+          ? staff.map(createStaffCard).join('') 
+          : '<p class="col-span-full text-center text-muted py-10">Aucun employé</p>';
+
+        empty.classList.toggle('hidden', staff.length > 0);
+        updateStats(staff);
+        applyFilters();
+      } catch (err) {
+        container.innerHTML = `<div class="col-span-full text-center py-16 text-danger">Erreur: ${err.message}</div>`;
+      }
+    }
+
+    function openEditModal(staff) {
+      editingStaffId = staff.id;
+      const f = document.getElementById('addStaffForm');
+      f.name.value = staff.name;
+      f.email.value = staff.email;
+      f.role.value = staff.role;
+      f.phone.value = staff.phone || '';
+
+      const preview = document.getElementById('photoPreview');
+      if (staff.profile_image) {
+        preview.src = `${API_BASE_URL}${staff.profile_image}`;
+        preview.classList.remove('hidden');
+        document.getElementById('uploadText').textContent = 'Changer photo';
+      }
+      document.getElementById('addStaffModal').classList.remove('hidden');
+      document.getElementById('modalTitle').textContent = 'Modifier Employé';
+    }
+
+    document.getElementById('file').addEventListener('change', e => {
+      const file = e.target.files[0];
+      const preview = document.getElementById('photoPreview');
+      const text = document.getElementById('uploadText');
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = ev => { preview.src = ev.target.result; preview.classList.remove('hidden'); text.textContent = file.name; };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    async function handleSubmit() {
+      const form = document.getElementById('addStaffForm');
+      const formData = new FormData(form);
+      if (document.getElementById('file').files[0]) formData.append('file', document.getElementById('file').files[0]);
+
+      const url = editingStaffId ? `${API_BASE_URL}/staff/${editingStaffId}` : `${API_BASE_URL}/staff/`;
+      const method = editingStaffId ? 'PUT' : 'POST';
+
+      const btn = form.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      btn.innerHTML = `<div class="loader"></div><span class="ml-2">Enregistrement...</span>`;
+
+      try {
+        const res = await fetch(url, { method, body: formData });
+        if (!res.ok) throw new Error((await res.json()).detail || `HTTP ${res.status}`);
+        showMessage(editingStaffId ? "Employé modifié !" : "Employé ajouté !");
+        setTimeout(() => window.location.reload(), 800);
+      } catch (err) {
+        showMessage(err.message, 'error');
+        btn.disabled = false;
+        btn.innerHTML = 'Enregistrer';
+      }
+    }
+
+    function showMessage(msg, type = 'success') {
+      const box = document.getElementById('messageBox');
+      box.innerHTML = `<div class="flex items-center gap-2">${type === 'error' ? 'Error' : 'Success'} <span>${msg}</span></div>`;
+      box.className = `p-4 text-sm rounded-xl flex items-center gap-2 animate-fade-in ${type === 'error' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`;
+      box.classList.remove('hidden');
+      setTimeout(() => box.classList.add('hidden'), 4000);
+    }
+
+    window.addEventListener('load', fetchStaff);
+  </script>
+
+  <script>
+    function showLoader(containerId, type = 'cards') {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      let loaderHTML = Array(6).fill().map(() => `
+        <div class="bg-white rounded-3xl shadow-lg p-6 animate-pulse">
+          <div class="skeleton-circle mx-auto mb-4"></div>
+          <div class="space-y-3">
+            <div class="skeleton-text"></div>
+            <div class="skeleton-text-short"></div>
+            <div class="flex gap-2"><div class="skeleton-button flex-1"></div><div class="skeleton-button flex-1"></div></div>
+          </div>
+        </div>
+      `).join('');
+      container.innerHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">${loaderHTML}</div>`;
+    }
+  </script>
+</body>
+</html>

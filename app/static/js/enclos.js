@@ -7,7 +7,8 @@ function refreshMap() {
 // === Créer ou mettre à jour le formulaire ===
 function renderForm() {
   const container = document.getElementById("enclosFormContainer");
-  container.className = "mt-6 p-3 bg-white rounded-xl shadow-lg animate-fade-in max-w-[300px] relative";
+  container.className =
+    "mt-6 p-3 bg-white rounded-xl shadow-lg animate-fade-in max-w-[300px] relative";
   container.innerHTML = `
     <button id="closeFormBtn" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800 font-bold">&times;</button>
     <h2 class="text-md font-semibold text-gray-800 mb-2">Créer / Modifier un enclos</h2>
@@ -47,13 +48,24 @@ function openEditForm(enclos) {
 document.body.addEventListener("submit", async (e) => {
   if (e.target && e.target.id === "enclosForm") {
     e.preventDefault();
+
     const name = document.getElementById("enclosName").value.trim();
     const description = document.getElementById("enclosType").value;
     const [latitude, longitude] = window.currentMarkerCoords || [0, 0];
 
-    if (!name) return; // Pas d'alert
+    if (!name) return;
 
-    const enclosData = { name, description, latitude, longitude };
+    // ✅ Structure conforme à ton format
+    const enclosData = {
+      name,
+      description,
+      latitude,
+      longitude,
+      area: 0, // Valeur par défaut (à calculer si besoin)
+      polygon_data: "", // Optionnel si tu n’as pas encore les polygones
+      id: window.editingEnclosId || 0,
+      animals: [], // Liste vide au départ
+    };
 
     try {
       const method = window.editingEnclosId ? "PUT" : "POST";
@@ -92,19 +104,25 @@ async function loadEnclos() {
 
     const enclos = await res.json();
     const list = document.getElementById("enclosList");
-    list.className = "space-y-2 max-h-[calc(100vh-200px)] overflow-y-auto pr-2";
+    list.className =
+      "space-y-2 max-h-[calc(100vh-200px)] overflow-y-auto pr-2";
     list.innerHTML = "";
 
     enclos.forEach((e) => {
       const li = document.createElement("li");
-      li.className = "flex justify-between items-center p-2 border rounded-lg bg-white hover:shadow-md transition-all text-sm";
+      li.className =
+        "flex justify-between items-center p-2 border rounded-lg bg-white hover:shadow-md transition-all text-sm";
       li.innerHTML = `
         <span class="font-medium text-gray-700 truncate" title="${e.name} (${e.description || 'N/A'})">
           ${e.name} (${e.description || "N/A"})
         </span>
         <div class="flex gap-1">
-          <button onclick='openEditForm(${JSON.stringify(e)})' class="bg-yellow-500 text-white p-1 rounded-lg hover:bg-yellow-600 transition" title="Modifier">✎</button>
-          <button onclick='deleteEnclos(${e.id})' class="bg-danger text-white p-1 rounded-lg hover:bg-red-700 transition" title="Supprimer">×</button>
+          <button onclick='openEditForm(${JSON.stringify(
+            e
+          )})' class="bg-yellow-500 text-white p-1 rounded-lg hover:bg-yellow-600 transition" title="Modifier">✎</button>
+          <button onclick='deleteEnclos(${
+            e.id
+          })' class="bg-danger text-white p-1 rounded-lg hover:bg-red-700 transition" title="Supprimer">×</button>
         </div>
       `;
       list.appendChild(li);

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Plan Gratuit | RanchSmart</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Rye&family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { rye: ['"Rye"', 'cursive'], montserrat: ['Montserrat', 'sans-serif'] },
+          colors: { primary: '#8B4513', accent: '#DAA520', dark: '#2F1B12', muted: '#6B7280' },
+          animation: { 'fade-up': 'fadeInUp 0.6s ease-out', 'pulse-soft': 'pulse 2s infinite' },
+          keyframes: { fadeInUp: { '0%': { opacity: 0, transform: 'translateY(20px)' }, '100%': { opacity: 1, transform: 'translateY(0)' } }}
+        }
+      }
+    }
+  </script>
+  <style>
+    .skeleton { @apply bg-gray-200 rounded animate-pulse; }
+    .loader { @apply w-8 h-8 border-4 border-t-accent border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin; }
+  </style>
+</head>
+<body class="font-montserrat text-gray-800 bg-gradient-to-br from-amber-50 to-orange-50 min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="fixed top-0 w-full bg-white/95 backdrop-blur-md shadow-lg z-50 h-20">
+    <div class="container mx-auto px-4 h-full flex justify-between items-center">
+      <a href="/" class="flex items-center">
+        <img src="/static/assets/Logo_P1.png" alt="RanchSmart" class="h-24 md:h-28 lg:h-32 w-auto max-h-full object-contain ">
+      </a>
+      <div class="flex items-center space-x-6">
+        <a href="/#features" class="text-gray-700 hover:text-accent font-semibold">Fonctionnalités</a>
+        <a href="/#pricing" class="text-primary font-bold">Tarifs</a>
+        <button onclick="openModal('loginModal')" class="text-gray-700 hover:text-accent font-medium">Connexion</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="pt-32 pb-20 text-center px-6">
+    <div class="container mx-auto max-w-4xl" data-aos="fade-up">
+      <div class="inline-block bg-green-100 text-green-700 px-4 py-1 rounded-full text-sm font-bold mb-6">PLAN GRATUIT</div>
+      <h1 class="text-5xl md:text-7xl font-rye text-primary mb-6">Commencez <span class="text-accent">Sans Frais</span></h1>
+      <p class="text-xl text-muted mb-8">Idéal pour les petits ranchs ou pour tester RanchSmart.</p>
+      <div class="text-6xl font-bold text-accent mb-2">0 XAF <span class="text-2xl text-gray-500">/ mois</span></div>
+      <p class="text-muted mb-10">Toujours gratuit • Aucune carte requise</p>
+      <button  class="bg-gradient-to-r from-primary to-accent text-white font-bold py-4 px-12 rounded-full text-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition">
+        Démarrer Gratuitement
+      </button>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="py-20 bg-white">
+    <div class="container mx-auto px-6 max-w-5xl">
+      <h2 class="text-4xl font-rye text-center text-primary mb-16" data-aos="fade-up">Ce dont vous avez besoin pour commencer</h2>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="flex items-start gap-4" data-aos="fade-up" data-aos-delay="100">
+          <i data-feather="check" class="w-6 h-6 text-accent"></i>
+          <div>
+            <h3 class="font-bold text-lg">Animaux </h3>
+            <p class="text-muted">Suivi limité du bétail</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4" data-aos="fade-up" data-aos-delay="200">
+          <i data-feather="check" class="w-6 h-6 text-accent"></i>
+          <div>
+            <h3 class="font-bold text-lg">Enclos limités</h3>
+            <p class="text-muted">Cartographie simple</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4" data-aos="fade-up" data-aos-delay="300">
+          <i data-feather="check" class="w-6 h-6 text-accent"></i>
+          <div>
+            <h3 class="font-bold text-lg">Rapports basiques</h3>
+            <p class="text-muted">Export PDF</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4" data-aos="fade-up" data-aos-delay="400">
+          <i data-feather="check" class="w-6 h-6 text-accent"></i>
+          <div>
+            <h3 class="font-bold text-lg">Permissions limitées</h3>
+            <p class="text-muted">Roles limités</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Bottom -->
+  <section class="py-20 text-center bg-gradient-to-t from-primary/5 to-transparent">
+    <div class="container mx-auto px-6">
+      <h3 class="text-3xl font-rye text-primary mb-6" data-aos="fade-up">Prêt à commencer ?</h3>
+      <button  class="bg-accent hover:bg-yellow-600 text-white font-bold py-4 px-12 rounded-full text-lg shadow-xl transform hover:scale-105 transition">
+        Créer mon compte gratuit
+      </button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white py-10 text-center">
+    <p class="text-sm">© 2025 RanchSmart. Tous droits réservés.</p>
+  </footer>
+
+  <!-- Modal Login -->
+  <div id="loginModal" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 transform scale-95 transition-all">
+      <div id="loginLoading" class="hidden text-center py-8">
+        <div class="loader mx-auto mb-4"></div>
+        <p class="text-muted">Connexion en cours...</p>
+      </div>
+      <form id="loginForm" class="space-y-4">
+        <input type="email" placeholder="Email" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-accent" required>
+        <input type="password" placeholder="Mot de passe" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-accent" required>
+        <button type="submit" class="w-full bg-primary text-white py-3 rounded-lg font-bold hover:bg-accent transition">Se connecter</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    AOS.init({ once: true });
+    feather.replace();
+
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+      setTimeout(() => document.querySelector('#' + id + ' > div').classList.replace('scale-95', 'scale-100'), 10);
+    }
+    function closeModal(id) {
+      const modal = document.getElementById(id);
+      modal.querySelector('div').classList.replace('scale-100', 'scale-95');
+      setTimeout(() => modal.classList.add('hidden'), 300);
+    }
+
+    function startFree() {
+      openModal('loginModal');
+      const form = document.getElementById('loginForm');
+      const loading = document.getElementById('loginLoading');
+      form.classList.add('hidden');
+      loading.classList.remove('hidden');
+      setTimeout(() => {
+        window.location.href = '/dashboard';
+      }, 1500);
+    }
+
+    document.getElementById('loginForm')?.addEventListener('submit', e => e.preventDefault() || startFree());
+  </script>
+</body>
+</html>
