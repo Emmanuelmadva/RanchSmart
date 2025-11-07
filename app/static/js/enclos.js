@@ -71,7 +71,7 @@ document.body.addEventListener("submit", async (e) => {
       const method = window.editingEnclosId ? "PUT" : "POST";
       const url = window.editingEnclosId
         ? `/enclosures/${window.editingEnclosId}`
-        : "/enclosures/";
+        : "https://ranchsmart-1.onrender.com/enclosures/";
 
       const response = await fetch(url, {
         method,
@@ -99,7 +99,7 @@ document.body.addEventListener("submit", async (e) => {
 // === Charger la liste des enclos ===
 async function loadEnclos() {
   try {
-    const res = await fetch("/enclosures/");
+    const res = await fetch("https://ranchsmart-1.onrender.com/enclosures/");
     if (!res.ok) throw new Error("Erreur de chargement des enclos");
 
     const enclos = await res.json();
@@ -135,7 +135,7 @@ async function loadEnclos() {
 // === Supprimer un enclos ===
 async function deleteEnclos(id) {
   try {
-    await fetch(`/enclosures/${id}`, { method: "DELETE" });
+    await fetch(`https://ranchsmart-1.onrender.com/enclosures/${id}`, { method: "DELETE" });
     await loadEnclos();
     refreshMap();
   } catch (err) {

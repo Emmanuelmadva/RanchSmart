@@ -5,6 +5,10 @@ from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 from app.services.enclosures.maps.generate_map import generate_map
 import os
+from fastapi.middleware.cors import CORSMiddleware
+
+
+
 
 
 from app.services.animals.models import Animal
@@ -19,6 +23,13 @@ from app.services.staff.routers import staff_router
 
 app = FastAPI(title="RanchSmart API")
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://ranchsmart-1.onrender.com"],  # ton frontend
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 # --- Création des tables ---
 def create_db_tables():
     print("Création des tables...")
